@@ -36,32 +36,36 @@
 			.navbar-brand img {
 				height: auto; /* Zachová proporce */
 			}
-			.card {
+			.featured-card {
 				width: 18rem;
 				margin: 1rem;
 				padding: 1rem;
-				height: 25rem; /* Set the fixed height for the card */
+				height: 25rem; /* Set the fixed height for the featured-card */
 				display: flex;
 				flex-direction: column;
+				text-decoration: none; /* Remove underline from featured-card links */
 			}
 
-			.card-img-top {
+			.featured-card:hover {
+				text-decoration: none; /* Ensure underline is not added on hover */
+				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow on hover */
+			}
+
+			.featured-card-img-top {
 				width: 100%;
 				height: 12rem; /* Set the fixed height for the image */
 				object-fit: cover; /* Ensure the image covers the area while maintaining aspect ratio */
 			}
 
-			.card-title {
+			.featured-card-title {
 				font-weight: bold;
 				color: #333; /* Přizpůsobíš barvu podle potřeby */
+				display: inline-block; /* Make width of text element only width of text */
 			}
-			.card-body {
+			.featured-card-body {
 				flex-grow: 1;
 				display: flex;
 				flex-direction: column;
-			}
-			.card-text {
-				flex-grow: 1;
 			}
 		</style>
 		<title>{% block title %}Název stránky{% endblock %}</title>
