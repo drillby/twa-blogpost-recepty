@@ -33,13 +33,21 @@
 			.nav-link.btn-outline-dark:hover {
 				color: #ffd700 !important;
 			}
+			.navbar-brand img {
+				height: auto; /* Zachová proporce */
+			}
 		</style>
 		<title>{% block title %}Název stránky{% endblock %}</title>
 	</head>
 	<body>
 		<nav class="navbar navbar-expand-lg navbar-custom">
 			<div class="content-container container-fluid">
-				<a class="navbar-brand" href="#">Logo</a>
+				<a class="navbar-brand" href="#"
+					><img
+						src="https://prspq1ztcixcgwhw.public.blob.vercel-storage.com/FoodFinder-logo-9UEGOUW0l5xlwTZEhCJLbrmo7kHelx.jpg"
+						alt="logo"
+						class="img-fluid"
+				/></a>
 				<button
 					class="navbar-toggler"
 					type="button"
