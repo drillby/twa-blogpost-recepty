@@ -7,4 +7,6 @@ content %}
 >
 	{% for recipe in recipes %} {% include "featured-card.html"%} {% endfor %}
 </div>
-{% endblock %}
+<h1>Nejnovější recepty</h1>
+{% for recipe in recipes %} {% include "recipe-card.html"%} {% endfor %} {%
+endblock %}
