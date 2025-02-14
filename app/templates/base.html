@@ -56,11 +56,12 @@
 				display: flex;
 				flex-direction: column;
 				text-decoration: none; /* Remove underline from featured-card links */
+				border-radius: 8px; /* Round the corners a bit */
 			}
 
 			.featured-card:hover {
 				text-decoration: none; /* Ensure underline is not added on hover */
-				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow on hover */
+				box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); /* Make shadow more pronounced */
 			}
 
 			.featured-card-img-top {
@@ -92,6 +93,25 @@
 			}
 			body {
 				background-color: var(--light-gray-color);
+			}
+			@media (max-width: 576px) {
+				.navbar-custom .container-fluid {
+					flex-direction: column;
+					align-items: flex-start;
+				}
+				.navbar-custom .navbar-brand,
+				.navbar-custom .navbar-toggler,
+				.navbar-custom .collapse {
+					width: 100%;
+					text-align: center;
+				}
+				.navbar-custom .navbar-toggler {
+					display: none; /* Hide the button */
+				}
+				.navbar-custom .collapse {
+					display: block; /* Always show the collapse content */
+					margin-top: 0.5rem;
+				}
 			}
 		</style>
 		<title>{% block title %}Název stránky{% endblock %}</title>
