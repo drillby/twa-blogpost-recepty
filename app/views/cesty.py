@@ -1,6 +1,6 @@
 import datetime
 
-from flask import render_template
+from flask import redirect, render_template, request, url_for
 
 from app import app
 
@@ -29,6 +29,15 @@ def index():
     ]
 
     return render_template("index.html", year=year, recipes=recipes)
+
+
+@app.route("/login")
+def login():
+    if request.method == "POST":
+        # logika pro prihlaseni
+        pass
+    else:
+        return render_template("login.html")
 
 
 @app.route("/about")
