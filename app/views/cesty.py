@@ -40,6 +40,15 @@ def login():
         return render_template("login.html")
 
 
+@app.route("/register")
+def register():
+    if request.method == "POST":
+        # logika pro registraci
+        pass
+    else:
+        return render_template("register.html")
+
+
 @app.route("/about")
 def about():
     return render_template("base.html")
