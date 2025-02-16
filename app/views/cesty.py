@@ -36,6 +36,22 @@ class RecipeDetail:
         self.related_recipes_id = related_recipes_id
 
 
+class User:
+
+    def __init__(
+        self, id, username, email, recipes, liked_recipes, profile_picture_url
+    ):
+        self.id = id
+        self.username = username
+        self.profile_picture_url = profile_picture_url
+        self.email = email
+        self.recipes = recipes
+        self.liked_recipes = liked_recipes
+
+    def __repr__(self):
+        return f"{self.username}"
+
+
 image1 = "https://cdn.xsd.cz/resize/6d125047dfac3dac99242ac561319391_resize=1280,889_.jpg?hash=f2c0b06867af20405e1c9a0c01cedc0a"
 image2 = "https://cdn.myshoptet.com/usr/www.peliskydog.cz/user/documents/upload/chodsky-pes.jpg"
 
@@ -116,3 +132,31 @@ def search():
         Recipe(4, "Recept 4", image2),
     ]
     return render_template("search-results.html", res=res, query=query)
+
+
+@app.route("/profile/<int:id>")
+def my_profile(id):
+    my_profile = bool(request.args.get("my_profile", False))
+    user = User(
+        id=1,
+        username="User 1",
+        profile_picture_url=image1,
+        email="a@a.a",
+        recipes=(
+            [
+                Recipe(1, "Recept 1", image1),
+                Recipe(2, "Recept 2", image2),
+                Recipe(3, "Recept 3", image1),
+                Recipe(4, "Recept 4", image2),
+            ]
+        ),
+        liked_recipes=(
+            [
+                Recipe(1, "Recept 1", image1),
+                Recipe(2, "Recept 2", image2),
+            ]
+            if my_profile
+            else []
+        ),
+    )
+    return render_template("my-profile.html", user=user)

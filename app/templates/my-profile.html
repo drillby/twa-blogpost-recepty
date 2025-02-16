@@ -1,0 +1,45 @@
+{% extends "base.html" %} {% block title %}Profil {{user.username}}{% endblock
+%} {% block content %}
+<div class="container mt-4">
+	<div class="profile-header d-flex align-items-center mb-4">
+		<img
+			src="https://cdn.myshoptet.com/usr/www.peliskydog.cz/user/documents/upload/chodsky-pes.jpg"
+			alt="Profilový obrázek"
+			class="rounded-circle"
+			width="100"
+			height="100"
+		/>
+		<h2 class="ms-3">{{user.username}}</h2>
+		<a href="#" class="nav-link btn btn-secondary ms-auto px-3 py-2">
+			Přidat nový recept
+		</a>
+	</div>
+	<h1>Oblíbené recepty</h1>
+	<div
+		class="row row-cols-1 row-cols-md-2 row-cols-lg-4 justify-content-center mb-4"
+	>
+		{% for recipe in user.liked_recipes %} {% include "featured-card.html"%} {%
+		endfor %} {% for _ in range(4 - user.liked_recipes|length) %}
+		<div class="col d-flex justify-content-center" style="visibility: hidden">
+			<div class="featured-card h-100">
+				<img
+					src="https://via.placeholder.com/150"
+					class="featured-card-img-top"
+					alt=""
+				/>
+				<div class="featured-card-body d-flex flex-column">
+					<h5 class="featured-card-title"></h5>
+				</div>
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+	<h1>Nahrané recepty</h1>
+	<div
+		class="row row-cols-1 row-cols-md-2 row-cols-lg-4 justify-content-center mb-4"
+	>
+		{% for recipe in user.recipes %} {% include "recipe-card.html"%} {% endfor
+		%}
+	</div>
+</div>
+{% endblock %}
