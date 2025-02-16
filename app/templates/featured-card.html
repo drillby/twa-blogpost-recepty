@@ -21,15 +21,19 @@
 		flex-direction: column;
 		text-decoration: none; /* Remove underline from featured-card links */
 		border-radius: 8px; /* Round the corners a bit */
+		box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); /* Add shadow to make it eye-catching */
+		transition: transform 0.3s, box-shadow 0.3s; /* Smooth transition for hover effects */
 	}
 	.featured-card:hover {
 		text-decoration: none; /* Ensure underline is not added on hover */
-		box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); /* Make shadow more pronounced */
+		transform: scale(1.05); /* Slightly enlarge the card on hover */
+		box-shadow: 0 12px 24px rgba(0, 0, 0, 0.6); /* Make shadow more pronounced on hover */
 	}
 	.featured-card-img-top {
 		width: 100%;
 		height: 16rem; /* Increase the height for the image */
 		object-fit: cover; /* Ensure the image covers the area while maintaining aspect ratio */
+		border-radius: 8px; /* Round the corners of the image */
 	}
 	.featured-card-title {
 		font-weight: bold;

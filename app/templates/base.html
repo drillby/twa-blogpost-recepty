@@ -127,12 +127,17 @@
 					<span class="navbar-toggler-icon"></span>
 				</button>
 				<div class="collapse navbar-collapse" id="navbarNav">
-					<form class="d-flex ms-auto">
+					<form
+						class="d-flex ms-auto"
+						action="{{url_for('search')}}"
+						method="get"
+					>
 						<input
 							class="form-control me-2"
 							type="search"
 							placeholder="Vyhledat..."
 							aria-label="Search"
+							name="query"
 						/>
 						<button class="btn btn-dark" type="submit">Vyhledat</button>
 					</form>
