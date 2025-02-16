@@ -6,7 +6,8 @@ from app import app
 
 
 class Recipe:
-    def __init__(self, name, image):
+    def __init__(self, id, name, image):
+        self.id = id
         self.name = name
         self.image = image
 
@@ -44,10 +45,10 @@ def index():
     year = datetime.datetime.now().year
 
     recipes = [
-        Recipe("Recept 1", image1),
-        Recipe("Recept 2", image2),
-        Recipe("Recept 3", image1),
-        Recipe("Recept 4", image2),
+        Recipe(1, "Recept 1", image1),
+        Recipe(2, "Recept 2", image2),
+        Recipe(3, "Recept 3", image1),
+        Recipe(4, "Recept 4", image2),
     ]
 
     return render_template("index.html", year=year, recipes=recipes)
@@ -93,14 +94,25 @@ def recipe_detail(id):
         ],
         instructions=f"Postup přípravy receptu {id}.",
         related_recipes_id=[
-            Recipe("Recept 1", image1),
-            Recipe("Recept 2", image2),
-            Recipe("Recept 3", image1),
-            Recipe("Recept 4", image2),
+            Recipe(1, "Recept 1", image1),
+            Recipe(2, "Recept 2", image2),
+            Recipe(3, "Recept 3", image1),
+            Recipe(4, "Recept 4", image2),
         ],
     )
 
     return render_template("recipe-detail.html", recipe=recipe)
 
 
-# call url for recipe_detail with id=1
+@app.route("/search")
+def search():
+    query = request.args.get("query")
+    if not query:
+        return redirect(url_for("index"))
+    res = [
+        Recipe(1, "Recept 1", image1),
+        Recipe(2, "Recept 2", image2),
+        Recipe(3, "Recept 3", image1),
+        Recipe(4, "Recept 4", image2),
+    ]
+    return render_template("search-results.html", res=res, query=query)
