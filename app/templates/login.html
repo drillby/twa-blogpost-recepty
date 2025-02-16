@@ -13,7 +13,11 @@ content %}
 					<h4>Přihlášení</h4>
 				</div>
 				<div class="card-body">
-					<form method="post" action="{{ url_for('login') }}">
+					<form
+						method="post"
+						action="{{ url_for('login') }}"
+						onsubmit="return validateLoginForm()"
+					>
 						<div class="mb-3">
 							<label for="username" class="form-label">Uživatelské jméno</label>
 							<input
@@ -23,6 +27,7 @@ content %}
 								name="username"
 								required
 							/>
+							<div id="usernameError" class="text-danger"></div>
 						</div>
 						<div class="mb-3">
 							<label for="password" class="form-label">Heslo</label>
@@ -33,6 +38,7 @@ content %}
 								name="password"
 								required
 							/>
+							<div id="passwordError" class="text-danger"></div>
 						</div>
 						<div class="d-grid">
 							<button type="submit" class="btn btn-dark">Přihlásit se</button>
@@ -43,4 +49,28 @@ content %}
 		</div>
 	</div>
 </div>
+<script>
+	function validateLoginForm() {
+		let isValid = true;
+
+		const username = document.getElementById("username").value;
+		const password = document.getElementById("password").value;
+
+		document.getElementById("usernameError").textContent = "";
+		document.getElementById("passwordError").textContent = "";
+
+		if (!username) {
+			document.getElementById("usernameError").textContent =
+				"Uživatelské jméno je povinné.";
+			isValid = false;
+		}
+		if (!password) {
+			document.getElementById("passwordError").textContent =
+				"Heslo je povinné.";
+			isValid = false;
+		}
+
+		return isValid;
+	}
+</script>
 {% endblock %}
