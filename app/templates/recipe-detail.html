@@ -2,19 +2,26 @@
 content %}
 <div class="container mt-4">
 	<h1>{{ recipe.title }}</h1>
-	<p>
-		Přidal:
-		<a href="#" class="author-link">
-			<img
-				src="{{ recipe.author_image }}"
-				alt="{{ recipe.author_name }}"
-				class="rounded-circle"
-				width="50"
-				height="50"
-			/>
-			{{ recipe.author_name }}
-		</a>
-	</p>
+	<div class="d-flex justify-content-between align-items-center mb-4">
+		<div>
+			<p>
+				Přidal
+				<a href="#" class="author-link">
+					<img
+						src="{{ recipe.author_image }}"
+						alt="{{ recipe.author_name }}"
+						class="rounded-circle"
+						width="50"
+						height="50"
+					/>
+					{{ recipe.author_name }}
+				</a>
+			</p>
+		</div>
+		<button class="favorite-button" onclick="toggleFavorite()">
+			<i class="bi bi-heart"></i> Přidat do oblíbených
+		</button>
+	</div>
 	<div class="image-box mb-4">
 		<div class="main-image-container mx-auto">
 			<img
@@ -154,6 +161,12 @@ content %}
 	.author-link:hover {
 		color: var(--dark-gold-color);
 	}
+	.favorite-button {
+		margin-left: 20px;
+	}
+	.favorite-button:hover {
+		background-color: var(--dark-gold-color);
+	}
 	@media (max-width: 768px) {
 		.main-image-container,
 		.ingredients,
@@ -201,5 +214,17 @@ content %}
 			document.getElementById("overlay").style.visibility = "hidden";
 		}
 	});
+
+	function toggleFavorite() {
+		const button = document.querySelector('.favorite-button');
+		const icon = button.querySelector('i');
+		button.classList.toggle('active');
+		if (button.classList.contains('active')) {
+			button.innerHTML = '<i class="bi bi-heart-fill"></i> Odebrat z oblíbených';
+		} else {
+			button.innerHTML = '<i class="bi bi-heart"></i> Přidat do oblíbených';
+		}
+		// Add logic to handle adding/removing from favorites
+	}
 </script>
 {% endblock %}
