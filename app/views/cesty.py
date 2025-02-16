@@ -160,3 +160,12 @@ def my_profile(id):
         ),
     )
     return render_template("profile.html", user=user)
+
+
+@app.route("/add-recipe", methods=["GET", "POST"])
+def add_recipe():
+    if request.method == "POST":
+        # logika pro pridani receptu
+        pass
+    else:
+        return render_template("add-recipe.html")
