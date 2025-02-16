@@ -4,7 +4,7 @@ content %}
 	<h1>{{ recipe.title }}</h1>
 	<p>
 		Přidal:
-		<a href="#">
+		<a href="#" class="author-link">
 			<img
 				src="{{ recipe.author_image }}"
 				alt="{{ recipe.author_name }}"
@@ -39,7 +39,7 @@ content %}
 	<div class="clearfix">
 		<div class="ingredients">
 			<h4>Potřebné suroviny</h4>
-			<ul>
+			<ul class="ingredients-list">
 				{% for ingredient in recipe.ingredients %}
 				<li>{{ ingredient }}</li>
 				{% endfor %}
@@ -47,7 +47,7 @@ content %}
 		</div>
 		<div class="steps steps-box">
 			<h4>Postup</h4>
-			<p>{{ recipe.instructions }}</p>
+			<p class="steps-guide">{{ recipe.instructions }}</p>
 		</div>
 	</div>
 	<div class="related-recipes">
@@ -130,6 +130,29 @@ content %}
 	.ingredients,
 	.steps-box {
 		width: 800px; /* Increased width */
+	}
+	.ingredients-list {
+		list-style-type: disc;
+		padding-left: 20px;
+	}
+	.ingredients-list li {
+		margin-bottom: 5px;
+		font-size: 1.1rem;
+		color: var(--dark-color);
+	}
+	.steps-guide {
+		display: block;
+		margin-top: 10px;
+		font-size: 1.1rem;
+		color: var(--dark-color);
+	}
+	.author-link {
+		text-decoration: none;
+		color: var(--dark-color);
+		font-weight: bold;
+	}
+	.author-link:hover {
+		color: var(--dark-gold-color);
 	}
 	@media (max-width: 768px) {
 		.main-image-container,
