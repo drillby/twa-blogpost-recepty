@@ -159,4 +159,4 @@ def my_profile(id):
             else []
         ),
     )
-    return render_template("my-profile.html", user=user)
+    return render_template("profile.html", user=user)
