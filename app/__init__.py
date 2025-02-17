@@ -9,4 +9,4 @@ app.config["DATABASE_URL"] = os.environ.get("DATABASE_URL")
 app.config["BLOB_READ_WRITE_TOKEN"] = os.environ.get("BLOB_READ_WRITE_TOKEN")
 
 
-from app.views import cesty
+from app.views import recipe_routes, search_routes, user_routes
