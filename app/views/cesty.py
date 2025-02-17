@@ -88,11 +88,6 @@ def register():
         return render_template("register.html")
 
 
-@app.route("/about")
-def about():
-    return render_template("base.html")
-
-
 @app.route("/recipe/<int:id>")
 def recipe_detail(id):
     recipe = RecipeDetail(
