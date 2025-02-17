@@ -169,3 +169,12 @@ def add_recipe():
         pass
     else:
         return render_template("add-recipe.html")
+
+
+@app.route("/account-settings", methods=["GET", "POST"])
+def account_settings():
+    if request.method == "POST":
+        # logika pro zmenu nastaveni uctu
+        pass
+    else:
+        return render_template("account-settings.html")
