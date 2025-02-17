@@ -1,0 +1,91 @@
+{% extends "base.html" %} {% block title %}Přidat nový recept{% endblock %} {%
+block content %}
+<div class="container mt-4">
+	<div class="row justify-content-center">
+		<div class="col-md-12">
+			<div class="card">
+				<div
+					class="card-header text-center"
+					style="background-color: var(--gold-color); color: var(--black-color)"
+				>
+					<h4>Přidat nový recept</h4>
+				</div>
+				<div class="card-body">
+					<form
+						method="post"
+						action="{{ url_for('add_recipe') }}"
+						enctype="multipart/form-data"
+					>
+						<div class="mb-3">
+							<label for="recipeName" class="form-label">Název receptu</label>
+							<input
+								type="text"
+								class="form-control"
+								id="recipeName"
+								name="recipeName"
+								required
+							/>
+						</div>
+						<div class="mb-3">
+							<label for="ingredients" class="form-label">Ingredience</label>
+							<textarea
+								class="form-control"
+								id="ingredients"
+								name="ingredients"
+								rows="5"
+								required
+								style="resize: none"
+							></textarea>
+						</div>
+						<div class="mb-3">
+							<label for="steps" class="form-label">Postup</label>
+							<textarea
+								class="form-control"
+								id="steps"
+								name="steps"
+								rows="5"
+								required
+								style="resize: none"
+							></textarea>
+						</div>
+						<div class="mb-3">
+							<label for="pictures" class="form-label">Fotografie</label>
+							<input
+								type="file"
+								class="form-control"
+								id="pictures"
+								name="pictures"
+								multiple
+								accept="image/*"
+							/>
+							<div id="fileError" class="text-danger"></div>
+						</div>
+						<div class="mb-3">
+							<label for="category" class="form-label">Kategorie</label>
+							<select
+								class="form-select"
+								id="category"
+								name="category"
+								required
+								data-live-search="true"
+							>
+								<option value="" disabled selected>Vyberte kategorii</option>
+								<option value="dezerty">Dezerty</option>
+								<option value="hlavni_jidla">Hlavní jídla</option>
+								<option value="napoje">Nápoje</option>
+								<option value="predkrmy">Předkrmy</option>
+								<option value="snidane">Snídaně</option>
+								<option value="svaciny">Svačiny</option>
+							</select>
+						</div>
+						<div class="d-grid">
+							<button type="submit" class="btn btn-dark">Přidat recept</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

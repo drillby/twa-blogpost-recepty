@@ -1,0 +1,12 @@
+{% extends "base.html" %} {% block title %}FoodFinder{% endblock %} {% block
+content %}
+<h1>Doporučené recepty</h1>
+<p>Nechte se inspirovat naším výběřem</p>
+<div
+	class="row row-cols-1 row-cols-md-2 row-cols-lg-4 justify-content-center mb-4"
+>
+	{% for recipe in recipes %} {% include "featured-card.html"%} {% endfor %}
+</div>
+<h1>Nejnovější recepty</h1>
+{% for recipe in recipes %} {% include "recipe-card.html"%} {% endfor %} {%
+endblock %}
