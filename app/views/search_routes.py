@@ -36,15 +36,15 @@ def generate_test_data():
     if not app.config["TESTING"]:
         return "Testovací data mohou být generována pouze v testovacím prostředí"
 
-    user = request.args.get("user", 0)
-    recipe = request.args.get("recipe", 0)
+    user = request.args.get("user", 0, type=int)
+    recipe = request.args.get("recipe", 0, type=int)
 
     fake = Faker()
     users = []
     recipes = []
 
     # Vytvoření uživatelů
-    for _ in range(int(user)):
+    for _ in range(user):
         user = User(
             username=fake.user_name(),
             email=fake.email(),
@@ -57,7 +57,7 @@ def generate_test_data():
     db.session.commit()  # Uložíme uživatele do DB, aby měly ID
 
     # Vytvoření receptů
-    for _ in range(int(recipe)):
+    for _ in range(recipe):
         recipe = Recipe(
             title=fake.sentence(nb_words=4),
             author_id=random.choice(users).id,

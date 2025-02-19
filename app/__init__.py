@@ -18,6 +18,7 @@ if DEVELOPMENT:
 app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY")
 app.config["BLOB_READ_WRITE_TOKEN"] = os.environ.get("BLOB_READ_WRITE_TOKEN")
 app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("SQLALCHEMY_DATABASE_URI")
+app.config["TESTING"] = os.environ.get("TESTING", False)
 
 
 db.init_app(app)
