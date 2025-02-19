@@ -24,8 +24,7 @@ db.init_app(app)
 
 with app.app_context():
     db.create_all()
-    num_of_tags = Tag.query.count()
-    if num_of_tags == 0:
+    if not Tag.query.first():
         tags = [
             "dezerty",
             "hlavni_jidla",
