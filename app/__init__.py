@@ -3,7 +3,7 @@ import os
 import dotenv
 from flask import Flask
 
-from .models.models import Tag, db
+from .models.models import db
 
 app = Flask(__name__)
 
