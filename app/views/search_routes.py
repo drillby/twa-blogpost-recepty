@@ -4,7 +4,7 @@ from flask import redirect, render_template, request, url_for
 
 from app import app, db
 
-from ..models.models import Recipe, RecipeImage, User
+from ..models.models import Recipe, RecipeImage, User, UserLikedRecipes
 
 
 @app.route("/search")
@@ -27,5 +27,3 @@ def index():
     return render_template(
         "index.html", year=year, recipes=recipes, recipes_featured=recipes_featured
     )
-
-

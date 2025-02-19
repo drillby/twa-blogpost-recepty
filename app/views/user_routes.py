@@ -3,7 +3,7 @@ from flask import redirect, render_template, request, url_for
 
 from app import app, db
 
-from ..models.models import Recipe, RecipeImage, User
+from ..models.models import Recipe, RecipeImage, User, UserLikedRecipes
 
 
 @app.route("/login", methods=["GET", "POST"])
