@@ -3,7 +3,7 @@ import os
 import dotenv
 from flask import Flask
 
-from .models.models import db
+from .models.models import Tag, db
 
 app = Flask(__name__)
 
@@ -24,6 +24,21 @@ db.init_app(app)
 
 with app.app_context():
     db.create_all()
+    num_of_tags = Tag.query.count()
+    if num_of_tags == 0:
+        tags = [
+            "dezerty",
+            "hlavni_jidla",
+            "napoje",
+            "predkrmy",
+            "snidane",
+            "svaciny",
+            "polevky",
+        ]
+        for tag in tags:
+            tag = Tag(name=tag)
+            db.session.add(tag)
+            db.session.commit()
 
 
 from app.views import recipe_routes, search_routes, user_routes

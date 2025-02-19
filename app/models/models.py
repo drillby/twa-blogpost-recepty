@@ -85,3 +85,21 @@ class UserLikedRecipes(db.Model):
     recipe_id = db.Column(
         db.Integer, db.ForeignKey("recipes.id", ondelete="CASCADE"), primary_key=True
     )
+
+
+def init_db():
+    db.create_all()
+
+    if not Tag.query.first():
+        tags = [
+            "Dezerty",
+            "Hlavní jídla",
+            "Nápoje",
+            "Předkrmy",
+            "Snídaně",
+            "Svačiny",
+        ]
+        for tag_name in tags:
+            tag = Tag(name=tag_name)
+            db.session.add(tag)
+        db.session.commit()

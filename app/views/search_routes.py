@@ -27,3 +27,5 @@ def index():
     return render_template(
         "index.html", year=year, recipes=recipes, recipes_featured=recipes_featured
     )
+
+

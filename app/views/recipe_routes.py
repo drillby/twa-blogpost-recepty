@@ -1,3 +1,4 @@
+import vercel_blob
 from flask import redirect, render_template, request, url_for
 
 from app import app, db
