@@ -22,22 +22,5 @@ app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("SQLALCHEMY_DATABASE_URI"
 
 db.init_app(app)
 
-with app.app_context():
-    db.create_all()
-    if not Tag.query.first():
-        tags = [
-            "dezerty",
-            "hlavni_jidla",
-            "napoje",
-            "predkrmy",
-            "snidane",
-            "svaciny",
-            "polevky",
-        ]
-        for tag in tags:
-            tag = Tag(name=tag)
-            db.session.add(tag)
-            db.session.commit()
-
 
 from app.views import recipe_routes, search_routes, user_routes
