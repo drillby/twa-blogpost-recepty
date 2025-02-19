@@ -1,6 +1,7 @@
+from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from app import db
+db = SQLAlchemy()
 
 
 class User(db.Model):
@@ -42,6 +43,7 @@ class Recipe(db.Model):
     ingredients = db.Column(db.Text, nullable=False)
     instructions = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
+    tag_id = db.Column(db.Integer, db.ForeignKey("tags.id"), nullable=True)
 
     author = db.relationship("User", back_populates="recipes")
     images = db.relationship(
@@ -50,6 +52,16 @@ class Recipe(db.Model):
     liked_by = db.relationship(
         "User", secondary="user_liked_recipes", back_populates="liked_recipes"
     )
+    tag = db.relationship("Tag", back_populates="recipes")
+
+
+class Tag(db.Model):
+    __tablename__ = "tags"
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), unique=True, nullable=False)
+
+    recipes = db.relationship("Recipe", back_populates="tag")
 
 
 class RecipeImage(db.Model):

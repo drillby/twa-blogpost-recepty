@@ -5,7 +5,8 @@ content %}
 <div
 	class="row row-cols-1 row-cols-md-2 row-cols-lg-4 justify-content-center mb-4"
 >
-	{% for recipe in recipes %} {% include "featured-card.html"%} {% endfor %}
+	{% for recipe in recipes_featured %} {% include "featured-card.html"%} {%
+	endfor %}
 </div>
 <h1>Nejnovější recepty</h1>
 {% for recipe in recipes %} {% include "recipe-card.html"%} {% endfor %} {%
