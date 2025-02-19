@@ -48,7 +48,7 @@ def generate_test_data():
         user = User(
             username=fake.user_name(),
             email=fake.email(),
-            password="password123",  # Default heslo pro všechny (hash se generuje v User modelu)
+            password=fake.password(),  # Default heslo pro všechny (hash se generuje v User modelu)
             profile_picture_url=fake.image_url(),
         )
         db.session.add(user)
@@ -63,7 +63,18 @@ def generate_test_data():
             author_id=random.choice(users).id,
             instructions=fake.text(),
             ingredients=fake.text(),
-            tag=random.choice(["vegan", "vegetarian", "meat", "dessert", None]),
+            tag=random.choice(
+                [
+                    "dezerty",
+                    "hlavni_jidla",
+                    "napoje",
+                    "polevky",
+                    "predkrmy",
+                    "snidane",
+                    "svaciny",
+                    "vecere",
+                ]
+            ),
         )
         db.session.add(recipe)
         recipes.append(recipe)
