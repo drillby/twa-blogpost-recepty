@@ -1,5 +1,7 @@
 import datetime
+import random
 
+from faker import Faker
 from flask import redirect, render_template, request, url_for
 
 from app import app, db
@@ -27,3 +29,64 @@ def index():
     return render_template(
         "index.html", year=year, recipes=recipes, recipes_featured=recipes_featured
     )
+
+
+@app.route("/generate-test-data")
+def generate_test_data():
+    if not app.config["TESTING"]:
+        return "Testovací data mohou být generována pouze v testovacím prostředí"
+
+    user = request.args.get("user", 0)
+    recipe = request.args.get("recipe", 0)
+
+    fake = Faker()
+    users = []
+    recipes = []
+
+    # Vytvoření uživatelů
+    for _ in range(int(user)):
+        user = User(
+            username=fake.user_name(),
+            email=fake.email(),
+            password="password123",  # Default heslo pro všechny (hash se generuje v User modelu)
+            profile_picture_url=fake.image_url(),
+        )
+        db.session.add(user)
+        users.append(user)
+
+    db.session.commit()  # Uložíme uživatele do DB, aby měly ID
+
+    # Vytvoření receptů
+    for _ in range(int(recipe)):
+        recipe = Recipe(
+            title=fake.sentence(nb_words=4),
+            author_id=random.choice(users).id,
+            instructions=fake.text(),
+            ingredients=fake.text(),
+            tag=random.choice(["vegan", "vegetarian", "meat", "dessert", None]),
+        )
+        db.session.add(recipe)
+        recipes.append(recipe)
+
+    db.session.commit()  # Uložíme recepty do DB, aby měly ID
+
+    # Přidání obrázků k receptům
+    for recipe in recipes:
+        num_images = random.randint(1, 5)
+        for _ in range(num_images):
+            image = RecipeImage(recipe_id=recipe.id, image_url=fake.image_url())
+            db.session.add(image)
+
+    db.session.commit()
+
+    # Přidání oblíbených receptů
+    for user in users:
+        liked_recipes = random.sample(
+            recipes, k=random.randint(1, min(5, len(recipes)))
+        )
+        for recipe in liked_recipes:
+            like_entry = UserLikedRecipes(user_id=user.id, recipe_id=recipe.id)
+            db.session.add(like_entry)
+
+    db.session.commit()
+    return "Testovací data byla vygenerována"
