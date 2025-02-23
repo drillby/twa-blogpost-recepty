@@ -1,12 +1,12 @@
 <div class="col d-flex justify-content-center">
 	<a href="/recipe/{{ recipe.id }}" class="featured-card h-100">
 		<img
-			src="{{ recipe.image }}"
+			src="{{ recipe.image_url }}"
 			class="featured-card-img-top"
 			alt="{{ recipe.name }}"
 		/>
 		<div class="featured-card-body d-flex flex-column">
-			<h5 class="featured-card-title">{{ recipe.name }}</h5>
+			<h5 class="featured-card-title">{{ recipe.title }}</h5>
 		</div>
 	</a>
 </div>

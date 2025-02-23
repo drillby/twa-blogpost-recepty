@@ -63,7 +63,7 @@ def register():
         return render_template("register.html")
 
 
-@app.route("/logout", methods=["POST"])
+@app.route("/logout", methods=["POST", "GET"])
 @login_required
 def logout():
     if not current_user.is_authenticated:
@@ -82,8 +82,62 @@ def account_settings():
         return render_template("account-settings.html")
 
 
+# test user
+# jenna39
+# heslo123
 @app.route("/profile/<int:id>")
 def my_profile(id):
-    my_profile = bool(request.args.get("my_profile", False))
-    user = {}
-    return render_template("profile.html", user=user)
+    user = db.session.query(User).get(id)
+    if user is None:
+        return redirect(url_for("index"))
+
+    user_info = {
+        "id": user.id,
+        "username": user.username,
+        "email": user.email,
+        "profile_picture_url": user.profile_picture_url,
+        "created_at": user.created_at,
+    }
+
+    # recipes with images
+    recipes = (
+        db.session.query(Recipe)
+        .filter(Recipe.author_id == id)
+        .options(db.joinedload(Recipe.images))  # Načtení obrázků receptu
+        .all()
+    )
+    recipes_dict = [
+        {
+            "id": recipe.id,
+            "title": recipe.title,
+            "image_url": recipe.images[0].image_url if recipe.images else None,
+        }
+        for recipe in recipes
+    ]
+
+    user_info["recipes"] = recipes_dict
+
+    if current_user.is_authenticated and current_user.id == id:
+        # user_liked_recipes with images by user_id
+        user_liked_recipes = (
+            db.session.query(Recipe)
+            .join(UserLikedRecipes, Recipe.id == UserLikedRecipes.recipe_id)
+            .filter(UserLikedRecipes.user_id == id)
+            .options(db.joinedload(Recipe.images))  # Načtení obrázků
+            .all()
+        )
+        user_liked_recipes_dict = [
+            {
+                "id": recipe.id,
+                "title": recipe.title,
+                "image_url": (recipe.images[0].image_url if recipe.images else None),
+            }
+            for recipe in user_liked_recipes
+        ]
+    else:
+        user_liked_recipes_dict = []
+
+    user_info["liked_recipes"] = user_liked_recipes_dict
+    print(user_info["liked_recipes"])
+    # return user_info
+    return render_template("profile.html", user=user_info)

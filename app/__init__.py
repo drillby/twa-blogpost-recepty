@@ -10,7 +10,6 @@ app = Flask(__name__)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = "login"
 
 
 @login_manager.user_loader
@@ -30,6 +29,7 @@ app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY")
 app.config["BLOB_READ_WRITE_TOKEN"] = os.environ.get("BLOB_READ_WRITE_TOKEN")
 app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("SQLALCHEMY_DATABASE_URI")
 app.config["TESTING"] = os.environ.get("TESTING", "False")
+app.config["DEBUG"] = os.environ.get("DEBUG", "False")
 
 
 db.init_app(app)
