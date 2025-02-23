@@ -2,10 +2,21 @@ import os
 
 import dotenv
 from flask import Flask
+from flask_login import LoginManager
 
-from .models.models import db
+from .models.models import User, db
 
 app = Flask(__name__)
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = "login"
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return db.session.query(User).get(user_id)
+
 
 DEVELOPMENT = True
 

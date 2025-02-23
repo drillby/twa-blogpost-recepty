@@ -1,7 +1,8 @@
 import vercel_blob
 from flask import redirect, render_template, request, url_for
+from flask_login import UserMixin, current_user, login_required, login_user, logout_user
 
-from app import app, db
+from app import app, db, login_manager
 
 from ..models.models import Recipe, RecipeImage, User, UserLikedRecipes
 
@@ -25,6 +26,7 @@ def register():
 
 
 @app.route("/account-settings", methods=["GET", "POST"])
+@login_required
 def account_settings():
     if request.method == "POST":
         # logika pro zmenu nastaveni uctu
