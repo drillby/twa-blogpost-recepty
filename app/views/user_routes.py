@@ -59,7 +59,6 @@ def login():
         user = (
             db.session.query(User).filter_by(username=request.form["username"]).first()
         )
-        print(user)
         if user and user.check_password(request.form["password"]):
             login_user(user)
             return redirect(url_for("index"))
@@ -192,6 +191,5 @@ def profile(id):
         user_liked_recipes_dict = []
 
     user_info["liked_recipes"] = user_liked_recipes_dict
-    print(user_info["liked_recipes"])
     # return user_info
     return render_template("profile.html", user=user_info)
