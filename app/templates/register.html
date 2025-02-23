@@ -67,6 +67,11 @@ content %}
 						<div class="d-grid">
 							<button type="submit" class="btn btn-dark">Registrovat se</button>
 						</div>
+						{% with messages = get_flashed_messages() %} {% if messages %}
+						<div class="alert alert-danger mt-3" role="alert">
+							{{ messages[0] }}
+						</div>
+						{% endif %} {% endwith %}
 					</form>
 				</div>
 			</div>
@@ -99,6 +104,26 @@ content %}
 		if (!password) {
 			document.getElementById("passwordError").textContent =
 				"Heslo je povinné.";
+			isValid = false;
+		} else if (password.length < 8) {
+			document.getElementById("passwordError").textContent =
+				"Heslo musí mít alespoň 8 znaků.";
+			isValid = false;
+		} else if (!/[A-Z]/.test(password)) {
+			document.getElementById("passwordError").textContent =
+				"Heslo musí obsahovat alespoň jedno velké písmeno.";
+			isValid = false;
+		} else if (!/[a-z]/.test(password)) {
+			document.getElementById("passwordError").textContent =
+				"Heslo musí obsahovat alespoň jedno malé písmeno.";
+			isValid = false;
+		} else if (!/[0-9]/.test(password)) {
+			document.getElementById("passwordError").textContent =
+				"Heslo musí obsahovat alespoň jednu číslici.";
+			isValid = false;
+		} else if (!/[!@#$%^&*]/.test(password)) {
+			document.getElementById("passwordError").textContent =
+				"Heslo musí obsahovat alespoň jeden speciální znak (!@#$%^&*).";
 			isValid = false;
 		}
 		if (password !== confirmPassword) {

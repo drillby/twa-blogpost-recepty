@@ -1,3 +1,4 @@
+import pyzxcvbn
 import vercel_blob
 from flask import flash, redirect, render_template, request, url_for
 from flask_login import UserMixin, current_user, login_required, login_user, logout_user
@@ -26,9 +27,38 @@ def login():
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
-    if request.method == "POST":
-        # logika pro registraci
-        pass
+    if current_user.is_authenticated:
+        return redirect(url_for("index"))
+
+    elif request.method == "POST":
+        username = request.form["username"]
+        email = request.form["email"]
+        password = request.form["password"]
+
+        # Kontrola, zda uživatel s daným emailem neexistuje
+        user = db.session.query(User).filter_by(email=email).first()
+        if user:
+            flash("Uživatel s tímto emailem již existuje", "danger")
+            return redirect(url_for("register"))
+
+        # Kontrola, zda uživatel s daným username neexistuje
+        user = db.session.query(User).filter_by(username=username).first()
+        if user:
+            flash("Uživatel s tímto uživatelským jménem již existuje", "danger")
+            return redirect(url_for("register"))
+
+        # Kontrola síly hesla
+        result = pyzxcvbn.zxcvbn(password)
+        if result["score"] < 2:
+            flash("Heslo je příliš slabé", "danger")
+            return redirect(url_for("register"))
+
+        user = User(username, email, password)
+        db.session.add(user)
+        db.session.commit()
+        login_user(user)
+        return redirect(url_for("index"))
+
     else:
         return render_template("register.html")
 

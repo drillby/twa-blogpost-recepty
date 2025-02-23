@@ -17,7 +17,9 @@ psycopg2-binary==2.9.10
 pycparser==2.22
 PyMySQL==1.1.1
 python-dotenv==1.0.1
+pyzxcvbn==0.8.0
 requests==2.32.3
+six==1.17.0
 SQLAlchemy==2.0.38
 typing_extensions==4.12.2
 tzdata==2025.1
