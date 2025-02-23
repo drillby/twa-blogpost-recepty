@@ -1,5 +1,5 @@
 import vercel_blob
-from flask import redirect, render_template, request, url_for
+from flask import flash, redirect, render_template, request, url_for
 from flask_login import UserMixin, current_user, login_required, login_user, logout_user
 
 from app import app, db, login_manager
@@ -10,8 +10,16 @@ from ..models.models import Recipe, RecipeImage, User, UserLikedRecipes
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
-        # logika pro prihlaseni
-        pass
+        user = (
+            db.session.query(User).filter_by(username=request.form["username"]).first()
+        )
+        print(user)
+        if user and user.check_password(request.form["password"]):
+            login_user(user)
+            return redirect(url_for("index"))
+        else:
+            flash("Nesprávné přihlašovací údaje", "danger")
+            return redirect(url_for("login"))
     else:
         return render_template("login.html")
 

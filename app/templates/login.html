@@ -14,7 +14,7 @@ content %}
 				</div>
 				<div class="card-body">
 					<form
-						method="post"
+						method="POST"
 						action="{{ url_for('login') }}"
 						onsubmit="return validateLoginForm()"
 					>
@@ -43,6 +43,12 @@ content %}
 						<div class="d-grid">
 							<button type="submit" class="btn btn-dark">Přihlásit se</button>
 						</div>
+						<!-- add error message from flash-->
+						{% with messages = get_flashed_messages() %} {% if messages %}
+						<div class="alert alert-danger mt-3" role="alert">
+							{{ messages[0] }}
+						</div>
+						{% endif %} {% endwith %}
 					</form>
 				</div>
 			</div>
