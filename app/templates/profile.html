@@ -21,12 +21,17 @@
 	<div
 		class="row row-cols-1 row-cols-md-2 row-cols-lg-4 justify-content-center mb-4"
 	>
-		{% for recipe in user.liked_recipes %} {% include "featured-card.html"%} {%
-		endfor %} {% for _ in range(4 - user.liked_recipes|length) %}
+		{% set empty_cards=4 %} {% if user.liked_recipes|length == 0%}
+		<div class="col d-flex justify-content-center">
+			<h3>Zatím nemáte žádné oblíbené recepty</h3>
+		</div>
+		{% set empty_cards=3 %} {% endif %} {% for recipe in user.liked_recipes %}
+		{% include "featured-card.html"%} {% endfor %} {% for _ in
+		range([empty_cards - user.liked_recipes|length, 0] | max) %}
 		<div class="col d-flex justify-content-center" style="visibility: hidden">
 			<div class="featured-card h-100">
 				<img
-					src="https://via.placeholder.com/150"
+					src="https://placehold.co/600x400"
 					class="featured-card-img-top"
 					alt=""
 				/>
@@ -41,8 +46,12 @@
 	<div
 		class="row row-cols-1 row-cols-md-2 row-cols-lg-4 justify-content-center mb-4"
 	>
-		{% for recipe in user.recipes %} {% include "recipe-card.html"%} {% endfor
-		%}
+		{% if user.recipes|length == 0 %}
+		<div class="col d-flex justify-content-center">
+			<h3>Zatím jste nenahrál žádné recepty</h3>
+		</div>
+		{% endif %} {% for recipe in user.recipes %} {% include "recipe-card.html"%}
+		{% endfor %}
 	</div>
 </div>
 {% endblock %}
