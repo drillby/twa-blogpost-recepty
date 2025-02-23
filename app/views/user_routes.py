@@ -1,11 +1,56 @@
+import hashlib
+import random
+from io import BytesIO
+
 import pyzxcvbn
 import vercel_blob
 from flask import flash, redirect, render_template, request, url_for
 from flask_login import UserMixin, current_user, login_required, login_user, logout_user
+from PIL import Image, ImageDraw
 
 from app import app, db, login_manager
 
 from ..models.models import Recipe, RecipeImage, User, UserLikedRecipes
+
+
+@app.context_processor
+def inject_user():
+    if not current_user.is_authenticated:
+        return {"user_info": None}
+    user_info = {
+        "id": current_user.id,
+        "username": current_user.username,
+        "profile_picture_url": current_user.profile_picture_url,
+    }
+    return {"user_info": user_info}
+
+
+def generate_avatar(identifier, size=8, scale=32, output_size=256):
+    # Vytvoření hash z identifikátoru
+    hash_digest = hashlib.md5(identifier.encode()).hexdigest()
+    random.seed(int(hash_digest, 16))
+
+    # Barva na základě hashe
+    color = (
+        int(hash_digest[0:2], 16),
+        int(hash_digest[2:4], 16),
+        int(hash_digest[4:6], 16),
+    )
+
+    # Vytvoření prázdného obrázku
+    img = Image.new("RGB", (size, size), "white")
+    draw = ImageDraw.Draw(img)
+
+    # Generování symetrického vzoru
+    for x in range(size // 2 + 1):
+        for y in range(size):
+            if random.choice([True, False]):
+                draw.point((x, y), fill=color)
+                draw.point((size - x - 1, y), fill=color)
+
+    # Zvětšení na požadovanou velikost
+    img = img.resize((output_size, output_size), Image.NEAREST)
+    return img
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -53,7 +98,16 @@ def register():
             flash("Heslo je příliš slabé", "danger")
             return redirect(url_for("register"))
 
-        user = User(username, email, password)
+        profile_picture = generate_avatar(username)
+        img_data = BytesIO()
+        profile_picture.save(img_data, format="PNG")
+        img_bytes = img_data.getvalue()
+        profile_picture_res = vercel_blob.put(
+            f"profile_pictures/{username}.png", img_bytes
+        )
+        profile_picture_url = profile_picture_res["url"]
+
+        user = User(username, email, password, profile_picture_url)
         db.session.add(user)
         db.session.commit()
         login_user(user)
@@ -86,7 +140,7 @@ def account_settings():
 # jenna39
 # heslo123
 @app.route("/profile/<int:id>")
-def my_profile(id):
+def profile(id):
     user = db.session.query(User).get(id)
     if user is None:
         return redirect(url_for("index"))

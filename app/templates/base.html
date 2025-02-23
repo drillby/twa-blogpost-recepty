@@ -164,7 +164,28 @@
 						/>
 						<button class="btn btn-dark" type="submit">Vyhledat</button>
 					</form>
-					<ul class="navbar-nav ms-3">
+					<ul class="navbar-nav ms-3 align-items-center">
+						{% if user_info %}
+						<!-- add profile picture -->
+						<li class="nav-item">
+							<a
+								class="nav-link"
+								href="{{url_for('profile', id=user_info['id'])}}"
+								><img
+									src="{{user_info['profile_picture_url']}}"
+									alt="profile picture"
+									style="width: 50px; height: 50px; border-radius: 50%"
+							/></a>
+						</li>
+						<!-- add logout -->
+						<li class="nav-item">
+							<a
+								class="nav-link btn btn-outline-dark ms-2"
+								href="{{url_for('logout')}}"
+								>Odhlásit</a
+							>
+						</li>
+						{% else %}
 						<li class="nav-item">
 							<a
 								class="nav-link btn btn-outline-dark me-2"
@@ -179,6 +200,7 @@
 								>Registrace</a
 							>
 						</li>
+						{% endif %}
 					</ul>
 				</div>
 			</div>
