@@ -69,7 +69,7 @@ def auth_google():
         return redirect(url_for("index"))
     token = oauth.TWA_Blogpost.authorize_access_token()
 
-    userinfo = oauth.TWA_Blogpost.parse_id_token(token)
+    userinfo = token.get("userinfo")
     email = userinfo["email"]
     user = db.session.query(User).filter_by(email=email).first()
     if user:
@@ -84,7 +84,11 @@ def auth_google():
         db.session.add(user)
         db.session.commit()
         login_user(user)
-        return redirect(url_for("index"))
+        flash(
+            "Nastavte si heslo, abyste si mohli v budoucnu vybrat jiný způsob přihlášení než Google",
+            "info",
+        )
+        return redirect(url_for("account_settings"))
 
 
 @app.route("/login", methods=["GET", "POST"])
