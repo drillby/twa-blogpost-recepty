@@ -50,6 +50,33 @@ content %}
 						</div>
 						{% endif %} {% endwith %}
 					</form>
+					<!-- add "Or" line-through -->
+					<div class="text-center my-3">
+						<span style="position: relative; display: inline-block">
+							<hr
+								style="
+									position: absolute;
+									width: 100%;
+									top: 50%;
+									transform: translateY(-50%);
+								"
+							/>
+							<span
+								style="
+									background-color: white;
+									padding: 0 10px;
+									position: relative;
+								"
+								>nebo</span
+							>
+						</span>
+					</div>
+					<!-- add login by google button -->
+					<div class="d-grid mt-3">
+						<a href="{{ url_for('login_google') }}" class="btn btn-danger">
+							<i class="bi bi-google"></i> Přihlásit se pomocí Google
+						</a>
+					</div>
 				</div>
 			</div>
 		</div>

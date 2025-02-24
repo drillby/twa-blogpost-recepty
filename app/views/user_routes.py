@@ -8,7 +8,7 @@ from flask import flash, redirect, render_template, request, url_for
 from flask_login import UserMixin, current_user, login_required, login_user, logout_user
 from PIL import Image, ImageDraw
 
-from app import app, db, login_manager
+from app import app, db, login_manager, oauth
 
 from ..models.models import Recipe, RecipeImage, User, UserLikedRecipes
 
@@ -51,6 +51,40 @@ def generate_avatar(identifier, size=8, scale=32, output_size=256):
     # Zvětšení na požadovanou velikost
     img = img.resize((output_size, output_size), Image.NEAREST)
     return img
+
+
+@app.route("/login/google")
+def login_google():
+    # print(url_for("auth_google", _external=True))
+    if current_user.is_authenticated:
+        return redirect(url_for("index"))
+    return oauth.TWA_Blogpost.authorize_redirect(
+        redirect_uri=url_for("auth_google", _external=True)
+    )
+
+
+@app.route("/signin-google")
+def auth_google():
+    if current_user.is_authenticated:
+        return redirect(url_for("index"))
+    token = oauth.TWA_Blogpost.authorize_access_token()
+
+    userinfo = oauth.TWA_Blogpost.parse_id_token(token)
+    email = userinfo["email"]
+    user = db.session.query(User).filter_by(email=email).first()
+    if user:
+        login_user(user)
+        return redirect(url_for("index"))
+    else:
+        username = userinfo["name"]
+        random_password = "".join(
+            random.choices("abcdefghijklmnopqrstuvwxyz0123456789", k=12)
+        )
+        user = User(username, email, random_password, userinfo["picture"])
+        db.session.add(user)
+        db.session.commit()
+        login_user(user)
+        return redirect(url_for("index"))
 
 
 @app.route("/login", methods=["GET", "POST"])
