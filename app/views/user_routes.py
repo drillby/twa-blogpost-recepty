@@ -55,6 +55,8 @@ def generate_avatar(identifier, size=8, scale=32, output_size=256):
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for("index"))
     if request.method == "POST":
         user = (
             db.session.query(User).filter_by(username=request.form["username"]).first()
@@ -129,10 +131,37 @@ def logout():
 @login_required
 def account_settings():
     if request.method == "POST":
-        # logika pro zmenu nastaveni uctu
-        pass
+        username = request.form["username"]
+        email = request.form["email"]
+        new_password = request.form["password"]
+        # check if username changed
+        if username != current_user.username:
+            user = db.session.query(User).filter_by(username=username).first()
+            if user:
+                flash("Uživatel s tímto uživatelským jménem již existuje", "danger")
+                return redirect(url_for("account_settings"))
+        # check if email changed
+        if email != current_user.email:
+            user = db.session.query(User).filter_by(email=email).first()
+            if user:
+                flash("Uživatel s tímto emailem již existuje", "danger")
+                return redirect(url_for("account_settings"))
+        # check if password changed
+        if new_password:
+            result = pyzxcvbn.zxcvbn(new_password)
+            if result["score"] < 2:
+                flash("Heslo je příliš slabé", "danger")
+                return redirect(url_for("account_settings"))
+            current_user.set_password(new_password)
+        current_user.username = username
+        current_user.email = email
+        db.session.commit()
+        flash("Změny byly uloženy", "success")
+        return redirect(url_for("account_settings"))
+
     else:
-        return render_template("account-settings.html")
+        user = db.session.query(User).get(current_user.id)
+        return render_template("account-settings.html", user=user)
 
 
 # test user
