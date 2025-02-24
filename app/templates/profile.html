@@ -10,13 +10,16 @@
 			height="100"
 		/>
 		<h2 class="ms-3">{{user.username}}</h2>
+		{% if user.id == user_info.id %}
 		<a
 			href="{{ url_for('add_recipe') }}"
 			class="nav-link btn btn-secondary ms-auto px-3 py-2"
 		>
 			Přidat nový recept
 		</a>
+		{% endif %}
 	</div>
+	{% if user.id == user_info.id %}
 	<h1>Oblíbené recepty</h1>
 	<div
 		class="row row-cols-1 row-cols-md-2 row-cols-lg-4 justify-content-center mb-4"
@@ -42,13 +45,14 @@
 		</div>
 		{% endfor %}
 	</div>
+	{% endif %}
 	<h1>Nahrané recepty</h1>
 	<div
 		class="row row-cols-1 row-cols-md-2 row-cols-lg-4 justify-content-center mb-4"
 	>
 		{% if user.recipes|length == 0 %}
 		<div class="col d-flex justify-content-center">
-			<h3>Zatím jste nenahrál žádné recepty</h3>
+			<h3>Zatím zde nic není</h3>
 		</div>
 		{% endif %} {% for recipe in user.recipes %} {% include "recipe-card.html"%}
 		{% endfor %}

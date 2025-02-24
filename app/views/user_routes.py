@@ -139,6 +139,7 @@ def account_settings():
 # jenna39
 # heslo123
 @app.route("/profile/<int:id>")
+@login_required
 def profile(id):
     user = db.session.query(User).get(id)
     if user is None:
