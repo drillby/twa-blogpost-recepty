@@ -1,5 +1,28 @@
 {% extends "base.html" %} {% block title %}FoodFinder{% endblock %} {% block
-content %}
+content %} {% with messages = get_flashed_messages() %} {% if messages %}
+<div class="flash-messages">
+	{% for message in messages %}
+	<div class="alert alert-info alert-dismissible fade show" role="alert">
+		{{ message }}
+		<button
+			type="button"
+			class="btn-close"
+			data-bs-dismiss="alert"
+			aria-label="Close"
+		></button>
+	</div>
+	{% endfor %}
+</div>
+<script>
+	setTimeout(function () {
+		var alerts = document.querySelectorAll(".alert");
+		alerts.forEach(function (alert) {
+			var bsAlert = new bootstrap.Alert(alert);
+			bsAlert.close();
+		});
+	}, 5000);
+</script>
+{% endif %} {% endwith %}
 <h1>Doporučené recepty</h1>
 <p>Nechte se inspirovat naším výběřem</p>
 <div

@@ -74,6 +74,7 @@ def auth_google():
     user = db.session.query(User).filter_by(email=email).first()
     if user:
         login_user(user)
+        flash("Přihlášení proběhlo úspěšně", "success")
         return redirect(url_for("index"))
     else:
         username = userinfo["name"]
@@ -101,6 +102,7 @@ def login():
         )
         if user and user.check_password(request.form["password"]):
             login_user(user)
+            flash("Přihlášení proběhlo úspěšně", "success")
             return redirect(url_for("index"))
         else:
             flash("Nesprávné přihlašovací údaje", "danger")
@@ -150,6 +152,9 @@ def register():
         db.session.add(user)
         db.session.commit()
         login_user(user)
+
+        flash("Registrace proběhla úspěšně", "success")
+
         return redirect(url_for("index"))
 
     else:
@@ -159,9 +164,8 @@ def register():
 @app.route("/logout", methods=["POST", "GET"])
 @login_required
 def logout():
-    if not current_user.is_authenticated:
-        return redirect(url_for("index"))
     logout_user()
+    flash("Odhlášení proběhlo úspěšně", "success")
     return redirect(url_for("index"))
 
 
@@ -278,5 +282,7 @@ def delete_account():
 
     db.session.commit()
     logout_user()
+
+    flash("Účet byl smazán", "success")
 
     return redirect(url_for("index"))
