@@ -261,3 +261,22 @@ def profile(id):
     user_info["liked_recipes"] = user_liked_recipes_dict
     # return user_info
     return render_template("profile.html", user=user_info)
+
+
+@app.route("/delete-account", methods=["POST"])
+@login_required
+def delete_account():
+    user = db.session.query(User).get(current_user.id)
+    user.username = f"deleted-{user.id}"
+    user.email = f"deleted@domain-{user.id}.com"
+    user.set_password(
+        "".join(random.choices("abcdefghijklmnopqrstuvwxyz0123456789", k=12))
+    )
+    user.profile_picture_url = "https://prspq1ztcixcgwhw.public.blob.vercel-storage.com/FoodFinder_logo_mini-BT2ai1W1oPpncg6z0yBBx2hTX8Bcbr.png"
+
+    db.session.query(UserLikedRecipes).filter_by(user_id=user.id).delete()
+
+    db.session.commit()
+    logout_user()
+
+    return redirect(url_for("index"))

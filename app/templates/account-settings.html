@@ -68,6 +68,15 @@ content %}
 						</div>
 						{% endfor %} {% endif %} {% endwith %}
 					</form>
+					<hr class="my-4" />
+					<!-- add delete profile button -->
+					<form method="post" action="{{ url_for('delete_account') }}">
+						<div class="d-grid mt-3">
+							<button type="submit" class="btn btn-danger">
+								Smazat profil
+							</button>
+						</div>
+					</form>
 				</div>
 			</div>
 		</div>
