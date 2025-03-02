@@ -8,9 +8,23 @@ from ..models.models import Recipe, RecipeImage, User, UserLikedRecipes
 
 @app.route("/recipe/<int:id>")
 def recipe_detail(id):
-    recipe = {}
-
-    return render_template("recipe-detail.html", recipe=recipe)
+    recipe = db.session.query(Recipe).get_or_404(id)
+    ##recipe = Recipe.query.get_or_404(id)
+    ##upravit related_recipes_id
+    recipe_data = {"title": recipe.title,
+        "author_name": recipe.author.username,
+        "author_image": recipe.author.profile_picture_url
+        or url_for("static", filename="images/default-profile.png"),
+        "instructions": recipe.instructions,
+        "ingredients": recipe.ingredients.split("\n"),  # Rozdělit ingredience na řádky
+        "images": [img.image_url for img in recipe.images],
+        "related_recipes_id": 22
+        ##    related.id for related in db.session.query(Recipe).filter(Recipe.tag == recipe.tag).limit(4)
+        ##"related_recipes_id": [
+        ##    related.id for related in Recipe.query.filter(Recipe.tag == recipe.tag).limit(4)
+        ##]
+        }
+    return render_template("recipe-detail.html", recipe=recipe_data)
 
 
 @app.route("/add-recipe", methods=["GET", "POST"])
