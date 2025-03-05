@@ -54,19 +54,16 @@ document.getElementById("load-more").addEventListener("click", function () {
     const now = new Date();
     let clientHour = now.getHours();
 
-    // Ověření, že clientHour je platný
     if (isNaN(clientHour)) {
       throw new Error("Chybný čas");
     }
 
-    // Pokud je čas správný, pošlete ho na server
     fetch(`/?time=${clientHour}`, { method: "GET" })
       .then(response => response.text())
       .then(data => console.log(data))
       .catch(error => console.error("Chyba při odesílání času na server:", error));
 
   } catch (error) {
-    // Pokud dojde k chybě, pošleme "unknown"
     console.warn("Nepodařilo se získat aktuální hodinu, používá se serverový čas.");
     fetch(`/?time=NaN`, { method: "GET" });
   }
