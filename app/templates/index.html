@@ -9,8 +9,6 @@ content %}
 	endfor %}
 </div>
 
-
-
 <h1>Nejnovější recepty</h1>
 <div id="recipe-list">
   {% for recipe in recipes %}
@@ -20,37 +18,37 @@ content %}
 
 <button id="load-more" class="load-more-button" data-page="1" {% if not next_page %}hidden{% endif %}>Načíst další</button>
 
+
+<!--Load more button script-->
 <script>
 document.getElementById("load-more").addEventListener("click", function () {
     let button = this;
     let page = parseInt(button.getAttribute("data-page")) + 1;
 
     fetch(`/?page=${page}`)
-        .then(response => response.text())  // Změna na `response.text()` místo JSON
+        .then(response => response.text())  
         .then(data => {
             let parser = new DOMParser();
             let doc = parser.parseFromString(data, "text/html");
-
-            // Vložíme nové recepty do stránky
+          
             let recipeList = document.getElementById("recipe-list");
             let newRecipes = doc.querySelectorAll(".recipe-card");
             newRecipes.forEach(recipe => {
                 recipeList.appendChild(recipe);
             });
-
-            // Aktualizace čísla stránky
+     
             button.setAttribute("data-page", page);
-
-            // Schování tlačítka, pokud už nejsou další recepty
+           
             if (!doc.querySelector("#load-more").hasAttribute("data-page")) {
                 button.hidden = true;
             }
         })
         .catch(error => console.error("Chyba při načítání receptů:", error));
 });
-
 </script>
 
+
+<!--Send client time script-->
 <script>
   try {
     const now = new Date();
@@ -74,7 +72,7 @@ document.getElementById("load-more").addEventListener("click", function () {
   }
 </script>
 
-
+<!--Button (načíst další) style-->
 <style>
   .load-more-button {
 	background-color: var(--gold-color);

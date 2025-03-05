@@ -13,16 +13,17 @@ from fuzzywuzzy import fuzz
 from sqlalchemy.sql.expression import func, desc
 
 
+
 @app.route("/search")
 def search():
     query = request.args.get("query").lower()
     
-    #prázdné query vrátí na domácí stránku
+    #empty query returns index.html
     if not query:
         return redirect(url_for("index"))
     
 
-    # sorting by tags
+    # searching using tags
     tag_synonyms = {
         "vecere": ["večeře", "večeře recepty", "recepty na večeři", "co k večeři", "večerní jídla", "jídla k večeři", "večeře pro rodinu", "rychlá večeře", "večerní menu", "večeře pro dvě", "večeře pro děti", "co připravit na večeři"],
         "snidane": ["snídaně", "snídaně recepty", "co na snídani", "rychlá snídaně", "snídaně pro děti", "snídaně pro dva", "ideální snídaně", "sladká snídaně", "slaná snídaně", "snídaně do postele", "snídaně na víkend"],
@@ -40,12 +41,11 @@ def search():
             return render_template("search-results.html", res=recipes_tag, query=query)
 
 
-    #sorting by title or ingredients
-    recipes = Recipe.query.all()
-
+    #searching using title or ingredients
+    recipes_all = Recipe.query.all()
     matches = []
 
-    for recipe in recipes:
+    for recipe in recipes_all:
         match_ratio_title = fuzz.token_sort_ratio(recipe.title.lower(), query)
         match_ratio_ingredients = fuzz.token_sort_ratio(recipe.title.lower(), query)
         
@@ -59,9 +59,10 @@ def search():
     return render_template("search-results.html", res=sorted_recipes, query=query)
 
 
+
 @app.route("/", methods=["GET"])
 def index():
-    # Featured selection (dle času)
+    # Featured selection by client time 
     time_param = request.args.get("time")
     if time_param == "NaN" or time_param is None:
         print("Nepodařilo se získat čas od klienta, používám čas serveru.xD")
@@ -88,25 +89,16 @@ def index():
     else:
         searching_tag = "vecere"
 
-    # Featured recipes
     recipes_featured = Recipe.query.filter(Recipe.tag == searching_tag).order_by(func.random()).limit(4).all()
 
-      # Paginace pro nejnovější recepty
+      # Newest recepies 
     page = request.args.get("page", 1, type=int)
     per_page = 10
 
     recipes_paginated = Recipe.query.order_by(desc(Recipe.created_at)).paginate(page=page, per_page=per_page, error_out=False)
 
 
-    # Odeslání celé stránky včetně receptů a paginace
-    return render_template(
-        "index.html",
-        recipes=recipes_paginated.items,
-        recipes_featured=recipes_featured,
-        next_page=recipes_paginated.next_num if recipes_paginated.has_next else None
-    )
-
-
+    return render_template("index.html", recipes=recipes_paginated.items, recipes_featured=recipes_featured, next_page=recipes_paginated.next_num if recipes_paginated.has_next else None)
 
 
 
