@@ -3,16 +3,26 @@
 		href="/recipe/{{ recipe.id }}"
 		class="d-flex flex-column text-decoration-none"
 	>
+	
+
+	{% if recipe.images|length > 0 %}
 		<img
-			src="{{ recipe.image }}"
+			src="{{ recipe.images.0.image_url }}"
 			class="recipe-card-img-top w-100"
-			alt="{{ recipe.name }}"
+			alt="{{ recipe.title }}"
 		/>
+	{% else %}
+		<p>No image available</p>
+	{% endif %}
+
 		<div class="recipe-card-body p-3">
-			<h5 class="recipe-card-title">{{ recipe.name }}</h5>
+			<h5 class="recipe-card-title">{{ recipe.title }}</h5>
 		</div>
 	</a>
 </div>
+
+
+
 
 <style>
 	.recipe-card {
