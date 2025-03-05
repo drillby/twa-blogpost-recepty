@@ -8,9 +8,48 @@ content %}
 	{% for recipe in recipes_featured %} {% include "featured-card.html"%} {%
 	endfor %}
 </div>
-<h1>Nejnovější recepty</h1>
-{% for recipe in recipes %} {% include "recipe-card.html"%} {% endfor %} 
 
+
+
+<h1>Nejnovější recepty</h1>
+<div id="recipe-list">
+  {% for recipe in recipes %}
+      {% include "recipe-card.html" %}
+  {% endfor %}
+</div>
+
+<button id="load-more" class="load-more-button" data-page="1" {% if not next_page %}hidden{% endif %}>Načíst další</button>
+
+<script>
+document.getElementById("load-more").addEventListener("click", function () {
+    let button = this;
+    let page = parseInt(button.getAttribute("data-page")) + 1;
+
+    fetch(`/?page=${page}`)
+        .then(response => response.text())  // Změna na `response.text()` místo JSON
+        .then(data => {
+            let parser = new DOMParser();
+            let doc = parser.parseFromString(data, "text/html");
+
+            // Vložíme nové recepty do stránky
+            let recipeList = document.getElementById("recipe-list");
+            let newRecipes = doc.querySelectorAll(".recipe-card");
+            newRecipes.forEach(recipe => {
+                recipeList.appendChild(recipe);
+            });
+
+            // Aktualizace čísla stránky
+            button.setAttribute("data-page", page);
+
+            // Schování tlačítka, pokud už nejsou další recepty
+            if (!doc.querySelector("#load-more").hasAttribute("data-page")) {
+                button.hidden = true;
+            }
+        })
+        .catch(error => console.error("Chyba při načítání receptů:", error));
+});
+
+</script>
 
 <script>
   try {
@@ -35,5 +74,28 @@ content %}
   }
 </script>
 
+
+<style>
+  .load-more-button {
+	background-color: var(--gold-color);
+	color: var(--black-color);
+	border: 1px solid var(--dark-color);
+	padding: 12px 24px;
+	margin: 20px auto;
+	display: block;
+	cursor: pointer;
+	border-radius: 5px;
+	font-size: 1rem;
+	font-weight: bold;
+	text-align: center;
+	transition: background-color 0.3s, color 0.3s;
+}
+
+.load-more-button:hover {
+	background-color: var(--dark-gold-color);
+	color: var(--gold-color);
+}
+
+</style>
 
 {%endblock %}

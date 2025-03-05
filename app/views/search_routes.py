@@ -2,7 +2,7 @@ import datetime
 import random
 
 from faker import Faker
-from flask import redirect, render_template, request, url_for
+from flask import redirect, render_template, request, url_for, jsonify
 
 from app import app, db
 
@@ -59,12 +59,10 @@ def search():
     return render_template("search-results.html", res=sorted_recipes, query=query)
 
 
-@app.route("/")
+@app.route("/", methods=["GET"])
 def index():
-
-    #Featured selection
+    # Featured selection (dle času)
     time_param = request.args.get("time")
-    
     if time_param == "NaN" or time_param is None:
         print("Nepodařilo se získat čas od klienta, používám čas serveru.xD")
         client_time = datetime.datetime.now().hour
@@ -77,7 +75,6 @@ def index():
             client_time = datetime.datetime.now().hour
 
     searching_tag = ""
-
     if 0 < client_time < 9:
         searching_tag = "snidane"
     elif client_time < 11:
@@ -87,17 +84,30 @@ def index():
     elif client_time < 15:
         searching_tag = "dezerty"
     elif client_time < 17:
-        searching_tag = "svacina"   
+        searching_tag = "svacina"
     else:
-        searching_tag = "vecere"                           
-                    
+        searching_tag = "vecere"
+
+    # Featured recipes
     recipes_featured = Recipe.query.filter(Recipe.tag == searching_tag).order_by(func.random()).limit(4).all()
-               
-     #Newest selection               
 
-    recipes_newest = Recipe.query.order_by(desc(Recipe.created_at)).limit(10).all()
+      # Paginace pro nejnovější recepty
+    page = request.args.get("page", 1, type=int)
+    per_page = 10
 
-    return render_template("index.html", recipes=recipes_newest, recipes_featured=recipes_featured)
+    recipes_paginated = Recipe.query.order_by(desc(Recipe.created_at)).paginate(page=page, per_page=per_page, error_out=False)
+
+
+    # Odeslání celé stránky včetně receptů a paginace
+    return render_template(
+        "index.html",
+        recipes=recipes_paginated.items,
+        recipes_featured=recipes_featured,
+        next_page=recipes_paginated.next_num if recipes_paginated.has_next else None
+    )
+
+
+
 
 
 @app.route("/generate-test-data")
