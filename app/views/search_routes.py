@@ -102,7 +102,8 @@ def index():
 
 @app.route("/generate-test-data")
 def generate_test_data():
-    
+    if app.config["TESTING"] == "False":
+        return "Testovací data mohou být generována pouze v testovacím prostředí"
 
     user = request.args.get("user", 0, type=int)
     recipe = request.args.get("recipe", 0, type=int)
