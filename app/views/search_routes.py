@@ -147,6 +147,7 @@ def index():
     recipes_paginated = Recipe.query.order_by(desc(Recipe.created_at)).paginate(page=page, per_page=per_page, error_out=False)
 
 
+
     return render_template("index.html", recipes=recipes_paginated.items, recipes_featured=recipes_featured, next_page=recipes_paginated.next_num if recipes_paginated.has_next else None)
 
 
