@@ -12,6 +12,8 @@ from fuzzywuzzy import fuzz
 
 from sqlalchemy.sql.expression import func, desc
 
+import re
+
 
 
 @app.route("/search")
@@ -28,7 +30,7 @@ def search():
         "vecere": ["večeře", "večeře recepty", "recepty na večeři", "co k večeři", "večerní jídla", "jídla k večeři", "večeře pro rodinu", "rychlá večeře", "večerní menu", "večeře pro dvě", "večeře pro děti", "co připravit na večeři"],
         "snidane": ["snídaně", "snídaně recepty", "co na snídani", "rychlá snídaně", "snídaně pro děti", "snídaně pro dva", "ideální snídaně", "sladká snídaně", "slaná snídaně", "snídaně do postele", "snídaně na víkend"],
         "dezerty": ["dezert", "dezerty recepty", "sladkosti", "koláče", "dorty", "pečení", "cukroví", "sladké jídlo", "sladké recepty", "koláče a dezerty", "vánoční cukroví", "sladké dobroty", "dort na oslavu"],
-        "hlavni_jidla": ["hlavní jídla", "hlavní chod", "hlavní pokrm", "co na oběd", "oběd", "jídlo k obědu", "jednoduchá hlavní jídla", "hlavní jídlo pro rodinu", "jídlo pro dva", "ráno k obědu", "dobrá hlavní jídla", "oběd pro děti"],
+        "hlavni_jidla": ["hlavní jídla", "hlavní jídlo", "hlavní chod", "hlavní pokrm", "co na oběd", "oběd", "jídlo k obědu", "jednoduchá hlavní jídla", "hlavní jídlo pro rodinu", "jídlo pro dva", "ráno k obědu", "dobrá hlavní jídla", "oběd pro děti"],
         "napoje": ["nápoje", "pití", "nápoje recepty", "co na pití", "lahodné nápoje", "zdravé nápoje", "nealkoholické nápoje", "smoothie", "cocktaily", "ovocné nápoje", "studené nápoje", "teplé nápoje", "nápoje pro děti"],
         "polevky": ["polévky", "polévka", "polévka recepty", "zeleninová polévka", "masová polévka", "rychlá polévka", "domácí polévky", "krémové polévky", "česnečka", "vývary", "čočková polévka", "zeleninový vývar", "pohanková polévka"],
         "predkrmy": ["předkrmy", "předkrm", "snídaňové předkrmy", "předkrmy recepty", "studené předkrmy", "teplé předkrmy", "ideální předkrm", "sýrové předkrmy", "předkrmy pro hosty", "lahodné předkrmy", "malé jídlo", "co na předkrm"],
@@ -46,16 +48,63 @@ def search():
     matches = []
 
     for recipe in recipes_all:
-        match_ratio_title = fuzz.token_sort_ratio(recipe.title.lower(), query)
-        match_ratio_ingredients = fuzz.token_sort_ratio(recipe.title.lower(), query)
+
+        query_words = re.split(r'[\s,;.\-!]+', query.lower())  
+
+
+           #title searching 
+        title_words = re.split(r'[\s,;.\-!]+', recipe.title.lower())  
         
-        if match_ratio_title > 60 or match_ratio_ingredients > 70: 
-            weighted_match_ratio = 0.65 * match_ratio_title + 0.35 * match_ratio_ingredients 
-            matches.append(recipe, weighted_match_ratio)
-                   
+        match_ratios_title = [
+            fuzz.ratio(title_word, query_word)  
+            for title_word in title_words if len(title_word) > 2 
+            for query_word in query_words if len(query_word) > 2  
+         ]
+
+        match_ratio_title  = max(match_ratios_title)
+        
+        #Testing matches title
+        """
+        for title_word in title_words:  
+            for word in query_words:
+                if fuzz.ratio(title_word, word) > 70:
+                    print(title_word,fuzz.ratio(title_word, word), word)
+        """
+
+
+            #ingredients searching 
+        ingredients = re.split(r'[\s,;.\-!]+', recipe.ingredients.lower())  
+     
+        match_ratios_ingredients = [
+            fuzz.ratio(ingredient, query_word)  
+            for ingredient in ingredients if len(ingredient) > 2 
+            for query_word in query_words if len(query_word) > 2  
+         ]
+
+        match_ratio_ingredients = max(match_ratios_ingredients)
+    
+        #Testing matches ingredients
+        """
+        print(match_ratio_title)
+        for ingredient in ingredients:  
+            for word in query_words:
+                if fuzz.ratio(ingredient, word) > 79:
+                    print(ingredient,fuzz.ratio(ingredient, word), word)
+        """          
+
+
+        #results of matching 
+        if match_ratio_title > 79 or match_ratio_ingredients > 79: 
+            weighted_match_ratio = 0.55 * match_ratio_title + 0.45 * match_ratio_ingredients 
+            matches.append((recipe, weighted_match_ratio))
+
+
+
+    #sorting matches by weighted ratio              
     matches.sort(key=lambda x: x[1], reverse=True)
     sorted_recipes = [match[0] for match in matches]
     
+
     return render_template("search-results.html", res=sorted_recipes, query=query)
 
 
@@ -65,7 +114,7 @@ def index():
     # Featured selection by client time 
     time_param = request.args.get("time")
     if time_param == "NaN" or time_param is None:
-        print("Nepodařilo se získat čas od klienta, používám čas serveru.xD")
+        print("Nepodařilo se získat čas od klienta, používám čas serveru.")
         client_time = datetime.datetime.now().hour
     else:
         try:
