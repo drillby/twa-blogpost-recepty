@@ -1,17 +1,22 @@
 import vercel_blob
 from flask import redirect, render_template, request, url_for, flash
 from werkzeug.utils import secure_filename
+from io import BytesIO
 
 from app import app, db
 
 from ..models.models import Recipe, RecipeImage, User, UserLikedRecipes
-from io import BytesIO
+
 
 @app.route("/recipe/<int:id>")
 def recipe_detail(id):
-    recipe = {}
+    #recipe = {}
+    #dočasné funkce pro funkci pro zobrazení detailu receptu    
+    recipe = Recipe.query.get_or_404(id)
+    images = RecipeImage.query.filter_by(recipe_id=id).all() 
+    recipe.images = [image.image_url for image in images]
+    return render_template("recipe-detail.html", recipe=recipe) 
 
-    return render_template("recipe-detail.html", recipe=recipe)
 
 
 @app.route("/add-recipe", methods=["GET", "POST"])
@@ -33,25 +38,40 @@ def add_recipe():
         user_id = 11  # Statické ID uživatele
 
         # Vytvoření nového receptu
-        new_recipe = Recipe(name=recipe_name, ingredients=ingredients, steps=steps, category=category, user_id=user_id)
+        new_recipe = Recipe(title=recipe_name, ingredients=ingredients, instructions=steps, tag=category, author_id=user_id)
         db.session.add(new_recipe)
         db.session.commit()
 
         # Uložení obrázků
         for index, picture in enumerate(pictures):
-             if picture:
-                img_data = BytesIO()
-                picture.save(img_data)
-                img_bytes = img_data.getvalue()
-                file_extension = picture.filename.split(".")[-1]
-                image_res = vercel_blob.put(f"recipe-images/{new_recipe.id}-{index}.{file_extension}", img_bytes)
-                image_url = image_res["url"]
-                
-                recipe_image = RecipeImage(recipe_id=new_recipe.id, image_url=image_url)
-                db.session.add(recipe_image)
-                db.session.commit()
-        
+            if picture and allowed_file(picture.filename):
+                try:
+                    img_data = BytesIO()
+                    picture.save(img_data)
+                    img_data.seek(0)  # reset pozice streamu pro načtení všech bajtů obrázku
+                    img_bytes = img_data.read()
+                    file_extension = picture.filename.split(".")[-1]
+                    image_path = f"recipe-images/{new_recipe.id}-{index + 1}.{file_extension}"
+                    
+                    # Nahrání obrázku na Vercel Blob Storage
+                    image_res = vercel_blob.put(image_path, img_bytes)
+                    image_url = image_res["url"]
+                    
+                    recipe_image = RecipeImage(recipe_id=new_recipe.id, image=image_url)
+                    db.session.add(recipe_image)
+                except Exception as e:
+                    flash(f"Chyba při nahrávání obrázku: {str(e)}", "danger")
+                    return redirect(url_for("add_recipe"))
+            else:
+                flash("Nepovolený formát souboru!", "danger")
+                return redirect(url_for("add_recipe"))
+
+        db.session.commit()
         flash("Recept byl úspěšně přidán.", "success")
         return redirect(url_for("recipe_detail", id=new_recipe.id))
     
     return render_template("add-recipe.html")
+
+def allowed_file(filename):
+    ALLOWED_EXTENSIONS = {'png'}
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
