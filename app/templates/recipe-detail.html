@@ -11,7 +11,7 @@ content %}
 					class="author-link"
 				>
 					<img
-						src="{{ recipe.author_image }}"
+						src="{{ recipe.author.profile_picture_url }}"
 						alt="{{ recipe.author_name }}"
 						class="rounded-circle"
 						width="50"
@@ -49,11 +49,13 @@ content %}
 	<div class="clearfix">
 		<div class="ingredients">
 			<h4>Potřebné suroviny</h4>
-			<ul class="ingredients-list">
-				{% for ingredient in recipe.ingredients %}
-				<li>{{ ingredient }}</li>
-				{% endfor %}
-			</ul>
+      <ul class="ingredients-list"></ul>
+        {% for ingredient in recipe.ingredients.split(".") %}
+        {% if ingredient.strip() %}
+        <li>{{ ingredient }}</li>
+        {% endif %}
+        {% endfor %}
+      </ul>
 		</div>
 		<div class="steps steps-box">
 			<h4>Postup</h4>

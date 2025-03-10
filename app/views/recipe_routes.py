@@ -2,6 +2,7 @@ from io import BytesIO
 
 import vercel_blob
 from flask import flash, redirect, render_template, request, url_for
+from flask_login import current_user, login_required
 from werkzeug.utils import secure_filename
 
 from app import app, db
@@ -13,13 +14,13 @@ from ..models.models import Recipe, RecipeImage, User, UserLikedRecipes
 @app.template_filter("format_images")
 def format_images(images):
     images = [image.image_url for image in images]
-    print(images)
     return images
 
 
 @app.route("/recipe/<int:id>")
 def recipe_detail(id):
     recipe = db.session.query(Recipe).get_or_404(id)
+    print(recipe.images)
 
     related_recipes = (
         Recipe.query.filter(Recipe.tag == recipe.tag, Recipe.id != recipe.id)
@@ -33,6 +34,7 @@ def recipe_detail(id):
     )
 
 
+@login_required
 @app.route("/add-recipe", methods=["GET", "POST"])
 def add_recipe():
     if request.method == "POST":
@@ -54,9 +56,8 @@ def add_recipe():
             flash("Všechna pole musí být vyplněná!", "danger")
             return redirect(url_for("add_recipe"))
 
-        # Přiřazení statického ID uživatele
-        user_id = 11  # Statické ID uživatele
-
+        # logged in user
+        user_id = current_user.id
         # Vytvoření nového receptu
         new_recipe = Recipe(
             title=recipe_name,
@@ -87,7 +88,9 @@ def add_recipe():
                     image_res = vercel_blob.put(image_path, img_bytes)
                     image_url = image_res["url"]
 
-                    recipe_image = RecipeImage(recipe_id=new_recipe.id, image=image_url)
+                    recipe_image = RecipeImage(
+                        recipe_id=new_recipe.id, image_url=image_url
+                    )
                     db.session.add(recipe_image)
                 except Exception as e:
                     flash(f"Chyba při nahrávání obrázku: {str(e)}", "danger")
@@ -104,5 +107,5 @@ def add_recipe():
 
 
 def allowed_file(filename):
-    ALLOWED_EXTENSIONS = {"png"}
+    ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg"}
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS

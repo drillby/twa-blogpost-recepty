@@ -59,7 +59,24 @@ block content %}
 								accept="image/*"
 							/>
 							<div id="fileError" class="text-danger"></div>
+							<button
+								type="button"
+								class="btn btn-secondary mt-2"
+								onclick="addMoreImages()"
+							>
+								Přidat další fotky
+							</button>
 						</div>
+						<script>
+							function addMoreImages() {
+								const newInput = document.createElement("input");
+								newInput.type = "file";
+								newInput.className = "form-control mt-2";
+								newInput.name = "pictures";
+								newInput.accept = "image/*";
+								document.getElementById("fileError").before(newInput);
+							}
+						</script>
 						<div class="mb-3">
 							<label for="category" class="form-label">Kategorie</label>
 							<select
