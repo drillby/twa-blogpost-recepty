@@ -67,12 +67,8 @@ content %}
 	</div>
 	<div class="related-recipes">
 		<h4>Podobné recepty</h4>
-		<div class="row row-cols-1 row-cols-md-3 g-4">
-			{% for recipe in related_recipes %}
-			<div class="col">
-				{% include 'featured-card.html' %}
-			</div>
-			{% endfor %}
+		<div id="recipe-list">
+			{% for recipe in related_recipes %} {% include "recipe-card.html" %} {% endfor %}
 		</div>
 	</div>
 </div>
