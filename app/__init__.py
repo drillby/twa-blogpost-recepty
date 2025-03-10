@@ -54,4 +54,4 @@ with app.app_context():
     db.create_all()
 
 
-from app.views import recipe_routes, search_routes, user_routes
+from app.views import crawler_routes, recipe_routes, search_routes, user_routes
