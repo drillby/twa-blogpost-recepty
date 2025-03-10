@@ -22,9 +22,11 @@ content %}
 				</a>
 			</p>
 		</div>
-		<button class="favorite-button" onclick="toggleFavorite()">
-			<i class="bi bi-heart"></i> Přidat do oblíbených
+		<button class="favorite-button" data-recipe-id="{{ recipe.id }}">
+			<i class="bi {% if is_favorited %}bi-heart-fill{% else %}bi-heart{% endif %}"></i>
+			{% if is_favorited %} Odebrat z oblíbených {% else %} Přidat do oblíbených {% endif %}
 		</button>
+		
 	</div>
 	<div class="image-box mb-4">
 		<div class="main-image-container mx-auto">
@@ -85,5 +87,52 @@ content %}
     let images = {{ recipe.images | format_images | tojson}};;
 </script>
 <script src="{{ url_for('static', filename='js/recipe-detail.js') }}" defer></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    console.log("🔹 JavaScript načten správně!");
+
+    // Najdeme tlačítko
+    const favoriteButton = document.querySelector(".favorite-button");
+
+    if (favoriteButton) {
+        favoriteButton.addEventListener("click", function() {
+            const recipeId = this.getAttribute("data-recipe-id");
+            console.log("🔹 Klik na tlačítko! ID receptu:", recipeId);
+
+            fetch(`/toggle-favorite/${recipeId}`, {
+                method: "POST",
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("🔹 Odpověď serveru:", data);
+
+                const icon = favoriteButton.querySelector("i");
+
+                if (data.status === "added") {
+                    icon.classList.remove("bi-heart");
+                    icon.classList.add("bi-heart-fill");
+                    favoriteButton.innerHTML = '<i class="bi bi-heart-fill"></i> Odebrat z oblíbených';
+                } else if (data.status === "removed") {
+                    icon.classList.remove("bi-heart-fill");
+                    icon.classList.add("bi-heart");
+                    favoriteButton.innerHTML = '<i class="bi bi-heart"></i> Přidat do oblíbených';
+                }
+            })
+            .catch(error => console.error("❌ Chyba v AJAX požadavku:", error));
+        });
+    } else {
+        console.log("❌ CHYBA: Tlačítko nebylo nalezeno!");
+    }
+});
+
+
+
+
+</script>
+
 
 {% endblock %}

@@ -4,7 +4,7 @@ import re
 
 from flask import jsonify, redirect, render_template, request, url_for
 from flask_login import login_required
-from fuzzywuzzy import fuzz
+from rapidfuzz import fuzz
 from sqlalchemy.sql.expression import desc, func
 
 from app import app, db
@@ -174,9 +174,9 @@ def search():
         match_ratio_ingredients = max(match_ratios_ingredients, default=0)
 
         # results of matching
-        if match_ratio_title > 79 or match_ratio_ingredients > 79:
+        if match_ratio_title > 50 or match_ratio_ingredients > 50:
             weighted_match_ratio = (
-                0.55 * match_ratio_title + 0.45 * match_ratio_ingredients
+                0.3 * match_ratio_title + 0.7 * match_ratio_ingredients
             )
             matches.append((recipe, weighted_match_ratio))
 
