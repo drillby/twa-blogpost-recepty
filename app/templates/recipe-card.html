@@ -1,37 +1,25 @@
+<link
+	rel="stylesheet"
+	href="{{ url_for('static', filename='css/recipe-card.css') }}"
+/>
 <div class="recipe-card w-100 mb-4">
-  <a
-    href="/recipe/{{ recipe.id }}"
-    class="d-flex flex-column text-decoration-none"
-  >
-    <!--If recipe has no image assigned -> show "Žádný dostupný obrázek"-->
-    {% if recipe.images|length > 0 %}
-    <img
-      src="{{ recipe.images.0.image_url }}"
-      class="recipe-card-img-top w-100"
-      alt="{{ recipe.title }}"
-    />
-    {% else %}
-    <p>Žádný dostupný obrázek</p>
-    {% endif %}
+	<a
+		href="/recipe/{{ recipe.id }}"
+		class="d-flex flex-column text-decoration-none"
+	>
+		<!--If recipe has no image assigned -> show "Žádný dostupný obrázek"-->
+		{% if recipe.images|length > 0 %}
+		<img
+			src="{{ recipe.images.0.image_url }}"
+			class="recipe-card-img-top w-100"
+			alt="{{ recipe.title }}"
+		/>
+		{% else %}
+		<p>Žádný dostupný obrázek</p>
+		{% endif %}
 
-    <div class="recipe-card-body p-3">
-      <h5 class="recipe-card-title">{{ recipe.title }}</h5>
-    </div>
-  </a>
+		<div class="recipe-card-body p-3">
+			<h5 class="recipe-card-title">{{ recipe.title }}</h5>
+		</div>
+	</a>
 </div>
-
-<style>
-  .recipe-card {
-    border-radius: 8px; /* Round the corners a bit */
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); /* Make shadow more pronounced */
-    overflow: hidden; /* Ensure content stays within rounded corners */
-  }
-  .recipe-card-img-top {
-    height: 18rem; /* Increase the height for the image */
-    object-fit: cover; /* Ensure the image covers the area while maintaining aspect ratio */
-  }
-  .recipe-card-title {
-    font-weight: bold;
-    color: var(--dark-color); /* Use the dark color variable */
-  }
-</style>

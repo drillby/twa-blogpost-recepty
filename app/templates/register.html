@@ -1,15 +1,16 @@
 {% extends "base.html" %} {% block title %}Registrace{% endblock %} {% block
 content %}
+<link
+	rel="stylesheet"
+	href="{{ url_for('static', filename='css/register.css') }}"
+/>
 <div
 	class="container d-flex justify-content-center align-items-center full-height"
 >
 	<div class="row justify-content-center">
-		<div class="col-md-6" style="width: 100%">
+		<div class="col-md-6 w-100">
 			<div class="card">
-				<div
-					class="card-header text-center"
-					style="background-color: var(--gold-color); color: var(--black-color)"
-				>
+				<div class="card-header text-center card-header-custom">
 					<h4>Registrace</h4>
 				</div>
 				<div class="card-body">
@@ -74,23 +75,9 @@ content %}
 						{% endif %} {% endwith %}
 					</form>
 					<div class="text-center my-3">
-						<span style="position: relative; display: inline-block">
-							<hr
-								style="
-									position: absolute;
-									width: 100%;
-									top: 50%;
-									transform: translateY(-50%);
-								"
-							/>
-							<span
-								style="
-									background-color: white;
-									padding: 0 10px;
-									position: relative;
-								"
-								>nebo</span
-							>
+						<span class="divider-container">
+							<hr class="divider-line" />
+							<span class="divider-text">nebo</span>
 						</span>
 					</div>
 					<div class="d-grid mt-3">
@@ -103,61 +90,5 @@ content %}
 		</div>
 	</div>
 </div>
-<script>
-	function validateForm() {
-		let isValid = true;
-
-		const username = document.getElementById("username").value;
-		const email = document.getElementById("email").value;
-		const password = document.getElementById("password").value;
-		const confirmPassword = document.getElementById("confirm_password").value;
-
-		document.getElementById("usernameError").textContent = "";
-		document.getElementById("emailError").textContent = "";
-		document.getElementById("passwordError").textContent = "";
-		document.getElementById("confirmPasswordError").textContent = "";
-
-		if (!username) {
-			document.getElementById("usernameError").textContent =
-				"Uživatelské jméno je povinné.";
-			isValid = false;
-		}
-		if (!email) {
-			document.getElementById("emailError").textContent = "Email je povinný.";
-			isValid = false;
-		}
-		if (!password) {
-			document.getElementById("passwordError").textContent =
-				"Heslo je povinné.";
-			isValid = false;
-		} else if (password.length < 8) {
-			document.getElementById("passwordError").textContent =
-				"Heslo musí mít alespoň 8 znaků.";
-			isValid = false;
-		} else if (!/[A-Z]/.test(password)) {
-			document.getElementById("passwordError").textContent =
-				"Heslo musí obsahovat alespoň jedno velké písmeno.";
-			isValid = false;
-		} else if (!/[a-z]/.test(password)) {
-			document.getElementById("passwordError").textContent =
-				"Heslo musí obsahovat alespoň jedno malé písmeno.";
-			isValid = false;
-		} else if (!/[0-9]/.test(password)) {
-			document.getElementById("passwordError").textContent =
-				"Heslo musí obsahovat alespoň jednu číslici.";
-			isValid = false;
-		} else if (!/[!@#$%^&*]/.test(password)) {
-			document.getElementById("passwordError").textContent =
-				"Heslo musí obsahovat alespoň jeden speciální znak (!@#$%^&*).";
-			isValid = false;
-		}
-		if (password !== confirmPassword) {
-			document.getElementById("confirmPasswordError").textContent =
-				"Hesla se neshodují.";
-			isValid = false;
-		}
-
-		return isValid;
-	}
-</script>
+<script src="{{	url_for('static', filename='js/register.js')}}"></script>
 {% endblock %}

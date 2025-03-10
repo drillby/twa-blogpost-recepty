@@ -1,0 +1,22 @@
+.full-width {
+	width: 100%;
+}
+.gold-bg-black-text {
+	background-color: var(--gold-color);
+	color: var(--black-color);
+}
+.line-through {
+	position: absolute;
+	width: 100%;
+	top: 50%;
+	transform: translateY(-50%);
+}
+.background-white-offset {
+	background-color: white;
+	padding: 0 10px;
+	position: relative;
+}
+.inline-block-relative {
+	position: relative;
+	display: inline-block;
+}

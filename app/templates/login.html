@@ -1,15 +1,16 @@
 {% extends "base.html" %} {% block title %}Přihlášení{% endblock %} {% block
 content %}
+<link
+	rel="stylesheet"
+	href="{{ url_for('static', filename='css/login.css') }}"
+/>
 <div
 	class="container d-flex justify-content-center align-items-center full-height"
 >
 	<div class="row justify-content-center">
-		<div class="col-md-6" style="width: 100%">
+		<div class="col-md-6 full-width">
 			<div class="card">
-				<div
-					class="card-header text-center"
-					style="background-color: var(--gold-color); color: var(--black-color)"
-				>
+				<div class="card-header text-center gold-bg-black-text">
 					<h4>Přihlášení</h4>
 				</div>
 				<div class="card-body">
@@ -52,23 +53,9 @@ content %}
 					</form>
 					<!-- add "Or" line-through -->
 					<div class="text-center my-3">
-						<span style="position: relative; display: inline-block">
-							<hr
-								style="
-									position: absolute;
-									width: 100%;
-									top: 50%;
-									transform: translateY(-50%);
-								"
-							/>
-							<span
-								style="
-									background-color: white;
-									padding: 0 10px;
-									position: relative;
-								"
-								>nebo</span
-							>
+						<span class="inline-block-relative">
+							<hr class="line-through" />
+							<span class="background-white-offset">nebo</span>
 						</span>
 					</div>
 					<!-- add login by google button -->
@@ -82,28 +69,5 @@ content %}
 		</div>
 	</div>
 </div>
-<script>
-	function validateLoginForm() {
-		let isValid = true;
-
-		const username = document.getElementById("username").value;
-		const password = document.getElementById("password").value;
-
-		document.getElementById("usernameError").textContent = "";
-		document.getElementById("passwordError").textContent = "";
-
-		if (!username) {
-			document.getElementById("usernameError").textContent =
-				"Uživatelské jméno je povinné.";
-			isValid = false;
-		}
-		if (!password) {
-			document.getElementById("passwordError").textContent =
-				"Heslo je povinné.";
-			isValid = false;
-		}
-
-		return isValid;
-	}
-</script>
+<script src="{{	url_for('static', filename='js/login.js')}}"></script>
 {% endblock %}

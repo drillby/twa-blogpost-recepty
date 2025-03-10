@@ -1,5 +1,9 @@
 {% extends "base.html" %} {% block title %}Profil {{user.username}}{% endblock
 %} {% block content %}
+<link
+	rel="stylesheet"
+	href="{{ url_for('static', filename='css/profile.css') }}"
+/>
 <div class="container mt-4">
 	<div class="profile-header d-flex align-items-center mb-4">
 		<img
@@ -37,7 +41,7 @@
 		{% set empty_cards=3 %} {% endif %} {% for recipe in user.liked_recipes %}
 		{% include "featured-card.html"%} {% endfor %} {% for _ in
 		range([empty_cards - user.liked_recipes|length, 0] | max) %}
-		<div class="col d-flex justify-content-center" style="visibility: hidden">
+		<div class="col d-flex justify-content-center hidden-col">
 			<div class="featured-card h-100">
 				<img
 					src="https://placehold.co/600x400"

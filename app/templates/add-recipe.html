@@ -1,13 +1,14 @@
 {% extends "base.html" %} {% block title %}Přidat nový recept{% endblock %} {%
 block content %}
+<link
+	rel="stylesheet"
+	href="{{ url_for('static', filename='css/add-recipe.css') }}"
+/>
 <div class="container mt-4">
 	<div class="row justify-content-center">
 		<div class="col-md-12">
 			<div class="card">
-				<div
-					class="card-header text-center"
-					style="background-color: var(--gold-color); color: var(--black-color)"
-				>
+				<div class="card-header text-center card-header-custom">
 					<h4>Přidat nový recept</h4>
 				</div>
 				<div class="card-body">
@@ -67,16 +68,6 @@ block content %}
 								Přidat další fotky
 							</button>
 						</div>
-						<script>
-							function addMoreImages() {
-								const newInput = document.createElement("input");
-								newInput.type = "file";
-								newInput.className = "form-control mt-2";
-								newInput.name = "pictures";
-								newInput.accept = "image/*";
-								document.getElementById("fileError").before(newInput);
-							}
-						</script>
 						<div class="mb-3">
 							<label for="category" class="form-label">Kategorie</label>
 							<select
@@ -106,5 +97,6 @@ block content %}
 		</div>
 	</div>
 </div>
+<script src="{{ url_for('static', filename='js/add-recipe.js') }}"></script>
 
 {% endblock %}
