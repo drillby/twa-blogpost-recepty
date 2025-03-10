@@ -1,28 +1,75 @@
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fexamples%2Ftree%2Fmain%2Fpython%2Fflask3&demo-title=Flask%203%20%2B%20Vercel&demo-description=Use%20Flask%203%20on%20Vercel%20with%20Serverless%20Functions%20using%20the%20Python%20Runtime.&demo-url=https%3A%2F%2Fflask3-python-template.vercel.app%2F&demo-image=https://assets.vercel.com/image/upload/v1669994156/random/flask.png)
+# FoodFinder
 
-# Flask + Vercel
+FoodFinder je webová aplikace pro sdílení a vyhledávání receptů, postavená na frameworku Flask a hostovaná na platformě Vercel. Aplikace umožňuje uživatelům přidávat, spravovat a vyhledávat recepty, spravovat svůj uživatelský profil a interagovat s ostatními uživateli prostřednictvím oblíbených receptů.
 
-This example shows how to use Flask 3 on Vercel with Serverless Functions using the [Python Runtime](https://vercel.com/docs/concepts/functions/serverless-functions/runtimes/python).
+## Funkcionalita
 
-## Demo
+### Autentizace a správa účtu
 
-https://flask-python-template.vercel.app/
+- Registrace uživatele s validací hesla a generováním profilového obrázku.
+- Přihlášení pomocí e-mailu/hesla nebo Google OAuth.
+- Možnost úpravy uživatelského profilu (změna jména, e-mailu, hesla).
+- Možnost smazání účtu.
 
-## How it Works
+### Práce s recepty
 
-This example uses the Web Server Gateway Interface (WSGI) with Flask to enable handling requests on Vercel with Serverless Functions.
+- Přidávání nových receptů s obrázky, ingrediencemi, postupem a kategorií.
+- Ukládání obrázků receptů na Vercel Blob Storage.
+- Vyhledávání receptů podle názvu, ingrediencí nebo kategorie (pomocí fuzzy matching).
+- Filtrování doporučených receptů na základě času dne.
+- Zobrazení detailu receptu s podrobným popisem a souvisejícími recepty.
+- Označování receptů jako oblíbené.
 
-## Running Locally
+### Hlavní stránky
 
-```bash
-npm i -g vercel
-vercel dev
-```
+- **Homepage:** zobrazuje doporučené a nejnovější recepty.
+- **Vyhledávání:** umožňuje vyhledávat recepty podle názvu a ingrediencí.
+- **Detail receptu:** obsahuje informace o receptu, obrázky a související recepty.
+- **Profil uživatele:** zobrazuje nahrané a oblíbené recepty uživatele.
 
-Your Flask application is now available at `http://localhost:3000`.
+## Použité technologie
 
-## One-Click Deploy
+- **Backend:** Flask, SQLAlchemy, Flask-Login
+- **Frontend:** Bootstrap 5, Jinja2
+- **Databáze:** SQLite (možnost rozšíření na PostgreSQL)
+- **Hostování:** Vercel (serverless deployment)
+- **Úložiště obrázků:** Vercel Blob Storage
 
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=vercel-examples):
+## Instalace a spuštění
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fexamples%2Ftree%2Fmain%2Fpython%2Fflask3&demo-title=Flask%203%20%2B%20Vercel&demo-description=Use%20Flask%203%20on%20Vercel%20with%20Serverless%20Functions%20using%20the%20Python%20Runtime.&demo-url=https%3A%2F%2Fflask3-python-template.vercel.app%2F&demo-image=https://assets.vercel.com/image/upload/v1669994156/random/flask.png)
+1. Naklonujte repozitář:
+   ```bash
+   git clone <repo_url>
+   cd FoodFinder
+   ```
+2. Vytvořte a aktivujte virtuální prostředí:
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # Linux/macOS
+   venv\Scripts\activate  # Windows
+   ```
+3. Nainstalujte závislosti:
+   ```bash
+   pip install -r requirements.txt
+   ```
+4. Spusťte aplikaci lokálně:
+
+   ```bash
+   flask run
+   ```
+
+   Aplikace poběží na `http://localhost:5000`.
+
+5. Nasazení na Vercel:
+   ```bash
+   npm i -g vercel
+   vercel
+   ```
+   Aplikace bude dostupná na hostovaném URL od Vercel.
+
+## Autoři
+
+- Pavel Podrazký
+- Ondřej Štecher
+- Marek Šimon
+- Jan Král

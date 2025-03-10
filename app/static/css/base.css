@@ -1,0 +1,82 @@
+:root {
+	--gold-color: #ffd700;
+	--black-color: black;
+	--dark-color: #333;
+	--dark-gold-color: #b8860b;
+	--light-gray-color: #fafafa; /* Slightly darker than white */
+}
+
+.navbar-custom {
+	background-color: var(--gold-color);
+	width: 100%;
+}
+
+.footer-custom {
+	background-color: var(--dark-gold-color); /* Dark yellow color */
+	width: 100%;
+}
+.navbar-brand,
+.nav-link {
+	color: var(--black-color) !important;
+	font-weight: bold;
+}
+.content-container {
+	max-width: min(80%, 1200px);
+	margin: 0 auto;
+}
+.nav-link.btn-outline-dark:hover {
+	color: var(--gold-color) !important;
+}
+.navbar-brand img {
+	height: auto; /* Zachová proporce */
+}
+.nav-link.btn-secondary {
+	border: 1px solid var(--dark-color);
+	color: var(--black-color) !important;
+}
+.nav-link.btn-secondary:hover {
+	background-color: var(--dark-color);
+	color: var(--gold-color) !important;
+}
+.btn-dark {
+	color: var(--gold-color) !important;
+}
+body {
+	background-color: var(--light-gray-color);
+}
+.full-height {
+	height: calc(100vh - 56px - 56px); /* Adjust for header and footer height */
+}
+.favorite-button {
+	background-color: var(--gold-color);
+	color: var(--black-color);
+	border: 1px solid var(--dark-color);
+	padding: 10px 20px;
+	margin-left: 20px;
+	cursor: pointer;
+	border-radius: 5px;
+	font-size: 1rem;
+}
+.favorite-button:hover {
+	background-color: var(--dark-gold-color);
+	color: var(--gold-color);
+}
+@media (max-width: 576px) {
+	.navbar-custom .container-fluid {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+	.navbar-custom .navbar-brand,
+	.navbar-custom .navbar-toggler,
+	.navbar-custom .collapse {
+		width: 100%;
+		text-align: center;
+	}
+	.navbar-custom .navbar-toggler {
+		display: none; /* Hide the button */
+	}
+	.navbar-custom .collapse {
+		display: block; /* Always show the collapse content */
+		margin-top: 0.5rem;
+	}
+}

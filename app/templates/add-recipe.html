@@ -1,16 +1,21 @@
 {% extends "base.html" %} {% block title %}Přidat nový recept{% endblock %} {%
 block content %}
+<link
+	rel="stylesheet"
+	href="{{ url_for('static', filename='css/add-recipe.css') }}"
+/>
 <div class="container mt-4">
 	<div class="row justify-content-center">
 		<div class="col-md-12">
 			<div class="card">
-				<div
-					class="card-header text-center"
-					style="background-color: var(--gold-color); color: var(--black-color)"
-				>
+				<div class="card-header text-center card-header-custom">
 					<h4>Přidat nový recept</h4>
 				</div>
 				<div class="card-body">
+					{% with messages = get_flashed_messages(with_categories=true) %} {% if
+					messages %} {% for category, message in messages %}
+					<div class="alert alert-{{ category }}">{{ message }}</div>
+					{% endfor %} {% endif %} {% endwith %}
 					<form
 						method="post"
 						action="{{ url_for('add_recipe') }}"
@@ -59,6 +64,13 @@ block content %}
 								accept="image/*"
 							/>
 							<div id="fileError" class="text-danger"></div>
+							<button
+								type="button"
+								class="btn btn-secondary mt-2"
+								onclick="addMoreImages()"
+							>
+								Přidat další fotky
+							</button>
 						</div>
 						<div class="mb-3">
 							<label for="category" class="form-label">Kategorie</label>
@@ -89,5 +101,6 @@ block content %}
 		</div>
 	</div>
 </div>
+<script src="{{ url_for('static', filename='js/add-recipe.js') }}"></script>
 
 {% endblock %}

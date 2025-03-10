@@ -1,0 +1,4 @@
+.card-header-custom {
+	background-color: var(--gold-color);
+	color: var(--black-color);
+}

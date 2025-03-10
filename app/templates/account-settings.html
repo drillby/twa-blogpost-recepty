@@ -1,13 +1,14 @@
 {% extends "base.html" %} {% block title %}Nastavení účtu{% endblock %} {% block
 content %}
+<link
+	rel="stylesheet"
+	href="{{ url_for('static', filename='css/account-settings.css') }}"
+/>
 <div class="container mt-4">
 	<div class="row justify-content-center">
 		<div class="col-md-12">
 			<div class="card">
-				<div
-					class="card-header text-center"
-					style="background-color: var(--gold-color); color: var(--black-color)"
-				>
+				<div class="card-header">
 					<h4>Nastavení účtu</h4>
 				</div>
 				<div class="card-body">
@@ -20,6 +21,7 @@ content %}
 								id="username"
 								name="username"
 								required
+								value="{{ user.username }}"
 							/>
 						</div>
 						<div class="mb-3">
@@ -30,6 +32,7 @@ content %}
 								id="email"
 								name="email"
 								required
+								value="{{ user.email }}"
 							/>
 						</div>
 						<div class="mb-3">
@@ -54,6 +57,25 @@ content %}
 						</div>
 						<div class="d-grid">
 							<button type="submit" class="btn btn-dark">Uložit změny</button>
+						</div>
+						<!-- show flash messages -->
+						{% with messages = get_flashed_messages(with_categories=true) %} {%
+						if messages %} {% for category, message in messages %}
+						<div
+							class="alert alert-{{ 'success' if category == 'success' else ( 'info' if category == 'info' else 'danger' ) }} mt-3"
+							role="alert"
+						>
+							{{ message }}
+						</div>
+						{% endfor %} {% endif %} {% endwith %}
+					</form>
+					<hr class="my-4" />
+					<!-- add delete profile button -->
+					<form method="post" action="{{ url_for('delete_account') }}">
+						<div class="d-grid mt-3">
+							<button type="submit" class="btn btn-danger">
+								Smazat profil
+							</button>
 						</div>
 					</form>
 				</div>

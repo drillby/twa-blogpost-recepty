@@ -1,0 +1,22 @@
+.w-100 {
+	width: 100%;
+}
+.card-header-custom {
+	background-color: var(--gold-color);
+	color: var(--black-color);
+}
+.divider-container {
+	position: relative;
+	display: inline-block;
+}
+.divider-line {
+	position: absolute;
+	width: 100%;
+	top: 50%;
+	transform: translateY(-50%);
+}
+.divider-text {
+	background-color: white;
+	padding: 0 10px;
+	position: relative;
+}
