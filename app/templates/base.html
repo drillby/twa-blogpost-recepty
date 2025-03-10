@@ -56,14 +56,6 @@
 				};
 		</script>
 		<script defer src="/_vercel/insights/script.js"></script>
-		<script>
-			window.si =
-				window.si ||
-				function () {
-					(window.siq = window.siq || []).push(arguments);
-				};
-		</script>
-		<script defer src="/_vercel/speed-insights/script.js"></script>
 		<title>{% block title %}Název stránky{% endblock %}</title>
 	</head>
 	<body style="display: flex; flex-direction: column; min-height: 100vh">
@@ -151,5 +143,13 @@
 			<p class="mb-0">Marek Šimon</p>
 			<p class="mb-0">Jan Král</p>
 		</footer>
+		<script>
+			window.si =
+				window.si ||
+				function () {
+					(window.siq = window.siq || []).push(arguments);
+				};
+		</script>
+		<script defer src="/_vercel/speed-insights/script.js"></script>
 	</body>
 </html>
