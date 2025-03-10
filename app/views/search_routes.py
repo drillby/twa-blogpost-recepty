@@ -111,52 +111,19 @@ def search():
 
 @app.route("/", methods=["GET"])
 def index():
-    # Featured selection by client time 
-    time_param = request.args.get("time")
-    if time_param == "NaN" or time_param is None:
-        print("Nepodařilo se získat čas od klienta, používám čas serveru.")
-        client_time = datetime.datetime.now().hour
-    else:
-        try:
-            client_time = int(time_param)
-            print(client_time)
-        except ValueError:
-            print("Neplatná hodnota času, používám serverový čas.")
-            client_time = datetime.datetime.now().hour
+    year = datetime.datetime.now().year
 
-    searching_tag = ""
-    if 0 < client_time < 9:
-        searching_tag = "snidane"
-    elif client_time < 11:
-        searching_tag = "svacina"
-    elif client_time < 13:
-        searching_tag = "hlavni_jidla"
-    elif client_time < 15:
-        searching_tag = "dezerty"
-    elif client_time < 17:
-        searching_tag = "svacina"
-    else:
-        searching_tag = "vecere"
+    recipes = []
 
-    recipes_featured = Recipe.query.filter(Recipe.tag == searching_tag).order_by(func.random()).limit(4).all()
+    recipes_featured = []
 
-      # Newest recepies 
-    page = request.args.get("page", 1, type=int)
-    per_page = 10
-
-    recipes_paginated = Recipe.query.order_by(desc(Recipe.created_at)).paginate(page=page, per_page=per_page, error_out=False)
-
-
-
-    return render_template("index.html", recipes=recipes_paginated.items, recipes_featured=recipes_featured, next_page=recipes_paginated.next_num if recipes_paginated.has_next else None)
-
+    return render_template(
+        "index.html", year=year, recipes=recipes, recipes_featured=recipes_featured
+    )
 
 
 @app.route("/generate-test-data")
 def generate_test_data():
-    if app.config["TESTING"] == "False":
-        return "Testovací data mohou být generována pouze v testovacím prostředí"
-
     user = request.args.get("user", 0, type=int)
     recipe = request.args.get("recipe", 0, type=int)
 

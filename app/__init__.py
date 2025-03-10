@@ -26,5 +26,6 @@ db.init_app(app)
 with app.app_context():
     db.create_all()
 
+# nějaký důležitý kód
 
 from app.views import recipe_routes, search_routes, user_routes

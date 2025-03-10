@@ -1,48 +1,49 @@
 <div class="col d-flex justify-content-center">
-	<a href="/recipe/{{ recipe.id }}" class="featured-card h-100">
-		<img
-			src="{{ recipe.images.0.image_url }}"
-			class="featured-card-img-top"
-			alt="{{ recipe.title }}"
-		/>
-		<div class="featured-card-body d-flex flex-column">
-			<h5 class="featured-card-title">{{ recipe.title }}</h5>
-		</div>
-	</a>
+  <a href="/recipe/{{ recipe.id }}" class="featured-card h-100">
+    <img
+      src="{{ recipe.images.0.image_urls }}"
+      class="featured-card-img-top"
+      alt="{{ recipe.title }}"
+      alt="{{ recipe.title }}"
+    />
+    <div class="featured-card-body d-flex flex-column">
+      <h5 class="featured-card-title">{{ recipe.title }}</h5>
+    </div>
+  </a>
 </div>
 
 <style>
-	.featured-card {
-		width: 24rem; /* Increase the width */
-		height: 30rem; /* Increase the height */
-		margin: 1rem;
-		padding: 1rem;
-		display: flex;
-		flex-direction: column;
-		text-decoration: none; /* Remove underline from featured-card links */
-		border-radius: 8px; /* Round the corners a bit */
-		box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); /* Add shadow to make it eye-catching */
-		transition: transform 0.3s, box-shadow 0.3s; /* Smooth transition for hover effects */
-	}
-	.featured-card:hover {
-		text-decoration: none; /* Ensure underline is not added on hover */
-		transform: scale(1.05); /* Slightly enlarge the card on hover */
-		box-shadow: 0 12px 24px rgba(0, 0, 0, 0.6); /* Make shadow more pronounced on hover */
-	}
-	.featured-card-img-top {
-		width: 100%;
-		height: 16rem; /* Increase the height for the image */
-		object-fit: cover; /* Ensure the image covers the area while maintaining aspect ratio */
-		border-radius: 8px; /* Round the corners of the image */
-	}
-	.featured-card-title {
-		font-weight: bold;
-		color: var(--dark-color); /* Přizpůsobíš barvu podle potřeby */
-		display: inline-block; /* Make width of text element only width of text */
-	}
-	.featured-card-body {
-		flex-grow: 1;
-		display: flex;
-		flex-direction: column;
-	}
+  .featured-card {
+    width: 24rem; /* Increase the width */
+    height: 30rem; /* Increase the height */
+    margin: 1rem;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none; /* Remove underline from featured-card links */
+    border-radius: 8px; /* Round the corners a bit */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); /* Add shadow to make it eye-catching */
+    transition: transform 0.3s, box-shadow 0.3s; /* Smooth transition for hover effects */
+  }
+  .featured-card:hover {
+    text-decoration: none; /* Ensure underline is not added on hover */
+    transform: scale(1.05); /* Slightly enlarge the card on hover */
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.6); /* Make shadow more pronounced on hover */
+  }
+  .featured-card-img-top {
+    width: 100%;
+    height: 16rem; /* Increase the height for the image */
+    object-fit: cover; /* Ensure the image covers the area while maintaining aspect ratio */
+    border-radius: 8px; /* Round the corners of the image */
+  }
+  .featured-card-title {
+    font-weight: bold;
+    color: var(--dark-color); /* Přizpůsobíš barvu podle potřeby */
+    display: inline-block; /* Make width of text element only width of text */
+  }
+  .featured-card-body {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
 </style>
