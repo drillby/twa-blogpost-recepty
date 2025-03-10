@@ -1,7 +1,7 @@
 import vercel_blob
 from flask import redirect, render_template, request, url_for, flash
 from werkzeug.utils import secure_filename
-from io import BytesIO, flash
+from io import BytesIO
 from werkzeug.utils import secure_filename
 from io import BytesIO
 
