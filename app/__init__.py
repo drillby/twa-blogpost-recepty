@@ -33,11 +33,7 @@ app.config["TESTING"] = os.environ.get("TESTING", "False")
 app.config["DEBUG"] = os.environ.get("DEBUG", "False")
 app.config["GOOGLE_CLIENT_ID"] = os.environ.get("GOOGLE_CLIENT_ID")
 app.config["GOOGLE_CLIENT_SECRET"] = os.environ.get("GOOGLE_CLIENT_SECRET")
-app.config["SERVER_NAME"] = (
-    os.environ.get("SERVER_URL", "127.0.0.1")
-    + ":"
-    + os.environ.get("SERVER_PORT", "5000")
-)
+
 
 db.init_app(app)
 
