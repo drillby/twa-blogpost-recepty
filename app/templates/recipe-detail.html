@@ -84,11 +84,13 @@ content %}
 </script>
 <script src="{{ url_for('static', filename='js/recipe-detail.js') }}" defer></script>
 
+
 <script>
+
 document.addEventListener("DOMContentLoaded", function() {
     console.log("🔹 JavaScript načten správně!");
 
-    // Najdeme tlačítko
+
     const favoriteButton = document.querySelector(".favorite-button");
 
     if (favoriteButton) {
@@ -105,6 +107,12 @@ document.addEventListener("DOMContentLoaded", function() {
             .then(response => response.json())
             .then(data => {
                 console.log("🔹 Odpověď serveru:", data);
+
+            
+                if (data.status === "error") {
+                    alert(data.message);
+                    return; 
+                }
 
                 const icon = favoriteButton.querySelector("i");
 
@@ -124,9 +132,6 @@ document.addEventListener("DOMContentLoaded", function() {
         console.log("❌ CHYBA: Tlačítko nebylo nalezeno!");
     }
 });
-
-
-
 
 </script>
 

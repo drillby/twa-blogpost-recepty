@@ -44,6 +44,7 @@ def recipe_detail(id):
 @app.route("/toggle-favorite/<int:recipe_id>", methods=["POST"])
 @login_required
 def toggle_favorite(recipe_id):
+
     user_id = current_user.id
     recipe = Recipe.query.get_or_404(recipe_id)
 
@@ -56,13 +57,14 @@ def toggle_favorite(recipe_id):
         db.session.commit()
         return jsonify({"status": "removed"})
     else:
+        #If user adding his own recipe, return error
+        if recipe.author_id == user_id:
+            return jsonify({"status": "error", "message": "Nemůžete přidat vlastní recept do oblíbených"}), 400
         # If not liked, add to favorites
         new_like = UserLikedRecipes(user_id=user_id, recipe_id=recipe_id)
         db.session.add(new_like)
         db.session.commit()
         return jsonify({"status": "added"})
-
-    return jsonify({"status": "error"})
 
 
 
