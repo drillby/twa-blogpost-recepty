@@ -146,16 +146,13 @@ def search():
             return render_template("search-results.html", res=recipes_tag, query=query)
 
     # searching using title or ingredients
+    query_words = re.split(r"[\s,;.\-!]+", query.lower())
     recipes_all = Recipe.query.all()
     matches = []
 
     for recipe in recipes_all:
-
-        query_words = re.split(r"[\s,;.\-!]+", query.lower())
-
         # title searching
         title_words = re.split(r"[\s,;.\-!]+", recipe.title.lower())
-
         match_ratios_title = [
             fuzz.ratio(title_word, query_word)
             for title_word in title_words
@@ -163,20 +160,10 @@ def search():
             for query_word in query_words
             if len(query_word) > 2
         ]
-
-        match_ratio_title = max(match_ratios_title)
-
-        # Testing matches title
-        """
-        for title_word in title_words:  
-            for word in query_words:
-                if fuzz.ratio(title_word, word) > 70:
-                    print(title_word,fuzz.ratio(title_word, word), word)
-        """
+        match_ratio_title = max(match_ratios_title, default=0)
 
         # ingredients searching
         ingredients = re.split(r"[\s,;.\-!]+", recipe.ingredients.lower())
-
         match_ratios_ingredients = [
             fuzz.ratio(ingredient, query_word)
             for ingredient in ingredients
@@ -184,17 +171,7 @@ def search():
             for query_word in query_words
             if len(query_word) > 2
         ]
-
-        match_ratio_ingredients = max(match_ratios_ingredients)
-
-        # Testing matches ingredients
-        """
-        print(match_ratio_title)
-        for ingredient in ingredients:  
-            for word in query_words:
-                if fuzz.ratio(ingredient, word) > 79:
-                    print(ingredient,fuzz.ratio(ingredient, word), word)
-        """
+        match_ratio_ingredients = max(match_ratios_ingredients, default=0)
 
         # results of matching
         if match_ratio_title > 79 or match_ratio_ingredients > 79:
