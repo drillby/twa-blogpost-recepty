@@ -1,233 +1,239 @@
 {% extends "base.html" %} {% block title %}Detail receptu{% endblock %} {% block
 content %}
 <div class="container mt-4">
-  <h1>{{ recipe.title }}</h1>
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <div>
-      <p>
-        Přidal
-        <a
-          href="{{url_for('profile', id=recipe.author.id)}}"
-          class="author-link"
-        >
-          <img
-            src="{{ recipe.author_image }}"
-            alt="{{ recipe.author_name }}"
-            class="rounded-circle"
-            width="50"
-            height="50"
-          />
-          {{ recipe.author_name }}
-        </a>
-      </p>
-    </div>
-    <button class="favorite-button" onclick="toggleFavorite()">
-      <i class="bi bi-heart"></i> Přidat do oblíbených
-    </button>
-  </div>
-  <div class="image-box mb-4">
-    <div class="main-image-container mx-auto">
-      <img
-        id="mainImage"
-        src="{{ recipe.images.0.url_image }}"
-        alt="{{ recipe.title }}"
-        class="img-fluid main-image"
-        onclick="openOverlay(currentIndex)"
-      />
-    </div>
-    <div class="thumbnail-images mt-2 d-flex justify-content-center">
-      {% for image in recipe.images %}
-      <img
-        src="{{ image }}"
-        alt="{{ recipe.title }} - Image {{ loop.index }}"
-        class="img-fluid thumbnail"
-        onclick="changeMainImage({{ loop.index0 }})"
-      />
-      {% endfor %}
-    </div>
-  </div>
-  <div class="clearfix">
-    <div class="ingredients">
-      <h4>Potřebné suroviny</h4>
-      <ul class="ingredients-list">
-        {% for ingredient in recipe.ingredients %}
-        <li>{{ ingredient }}</li>
-        {% endfor %}
-      </ul>
-    </div>
-    <div class="steps steps-box">
-      <h4>Postup</h4>
-      <p class="steps-guide">{{ recipe.instructions }}</p>
-    </div>
-  </div>
-  <div class="related-recipes">
-    <h4>Podobné recepty</h4>
-    <div class="row">
-      {% for recipe in related_recipes %} {% include 'featured-card.html' %} {%
-      endfor %}
-    </div>
-  </div>
+	<h1>{{ recipe.title }}</h1>
+	<div class="d-flex justify-content-between align-items-center mb-4">
+		<div>
+			<p>
+				Přidal
+				<a
+					href="{{url_for('profile', id=recipe.author.id)}}"
+					class="author-link"
+				>
+					<img
+						src="{{ recipe.author_image }}"
+						alt="{{ recipe.author_name }}"
+						class="rounded-circle"
+						width="50"
+						height="50"
+					/>
+					{{ recipe.author_name }}
+				</a>
+			</p>
+		</div>
+		<button class="favorite-button" onclick="toggleFavorite()">
+			<i class="bi bi-heart"></i> Přidat do oblíbených
+		</button>
+	</div>
+	<div class="image-box mb-4">
+		<div class="main-image-container mx-auto">
+			<img
+				id="mainImage"
+				src="{{ recipe.images.0.image_url }}"
+				alt="{{ recipe.title }}"
+				class="img-fluid main-image"
+				onclick="openOverlay(currentIndex)"
+			/>
+		</div>
+		<div class="thumbnail-images mt-2 d-flex justify-content-center">
+			{% for image in recipe.images %}
+			<img
+				src="{{ image.image_url }}"
+				alt="{{ recipe.title }} - Image {{ loop.index }}"
+				class="img-fluid thumbnail"
+				onclick="changeMainImage({{ loop.index0 }})"
+			/>
+			{% endfor %}
+		</div>
+	</div>
+	<div class="clearfix">
+		<div class="ingredients">
+			<h4>Potřebné suroviny</h4>
+			<ul class="ingredients-list">
+				{% for ingredient in recipe.ingredients %}
+				<li>{{ ingredient }}</li>
+				{% endfor %}
+			</ul>
+		</div>
+		<div class="steps steps-box">
+			<h4>Postup</h4>
+			<p class="steps-guide">{{ recipe.instructions }}</p>
+		</div>
+	</div>
+	<div class="related-recipes">
+		<h4>Podobné recepty</h4>
+		<div class="row">
+			{% for recipe in related_recipes %} {% include 'featured-card.html' %} {%
+			endfor %}
+		</div>
+	</div>
 </div>
 
 <div id="overlay" class="overlay">
-  <span class="nav-arrow nav-left" onclick="prevImage()">&#9664;</span>
-  <img id="overlayImage" src="" alt="Overlay Image" />
-  <span class="nav-arrow nav-right" onclick="nextImage()">&#9654;</span>
+	<span class="nav-arrow nav-left" onclick="prevImage()">&#9664;</span>
+	<img id="overlayImage" src="" alt="Overlay Image" />
+	<span class="nav-arrow nav-right" onclick="nextImage()">&#9654;</span>
 </div>
 <style>
-  .main-image-container {
-    width: 600px; /* Increased width */
-    height: 450px; /* Adjusted height */
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0 auto; /* Center the main image container */
-    border: 2px solid var(--gold-color); /* Add border to main image container */
-    border-radius: 8px; /* Add border radius to main image container */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow to main image container */
-  }
-  .main-image {
-    max-width: 100%;
-    max-height: 100%;
-    cursor: pointer;
-  }
-  .thumbnail-images {
-    display: flex;
-    gap: 10px;
-    justify-content: center; /* Center the thumbnails */
-  }
-  .thumbnail {
-    width: 80px;
-    height: 80px;
-    cursor: pointer;
-    object-fit: cover;
-    border: 2px solid var(--dark-gold-color); /* Add border to thumbnails */
-    border-radius: 8px; /* Add border radius to thumbnails */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow to thumbnails */
-  }
-  .overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    visibility: hidden;
-    flex-direction: column;
-  }
-  .overlay img {
-    max-width: 90%;
-    max-height: 80%;
-  }
-  .nav-arrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 2rem;
-    color: white;
-    cursor: pointer;
-  }
-  .nav-left {
-    left: 10px;
-  }
-  .nav-right {
-    right: 10px;
-  }
-  .ingredients,
-  .steps-box {
-    width: 800px; /* Increased width */
-  }
-  .ingredients-list {
-    list-style-type: disc;
-    padding-left: 20px;
-  }
-  .ingredients-list li {
-    margin-bottom: 5px;
-    font-size: 1.1rem;
-    color: var(--dark-color);
-  }
-  .steps-guide {
-    display: block;
-    margin-top: 10px;
-    font-size: 1.1rem;
-    color: var(--dark-color);
-  }
-  .author-link {
-    text-decoration: none;
-    color: var(--dark-color);
-    font-weight: bold;
-  }
-  .author-link:hover {
-    color: var(--dark-gold-color);
-  }
-  .favorite-button {
-    margin-left: 20px;
-  }
-  .favorite-button:hover {
-    background-color: var(--dark-gold-color);
-  }
-  @media (max-width: 768px) {
-    .main-image-container,
-    .ingredients,
-    .steps-box {
-      width: 100%; /* Full width on smaller screens */
-    }
-  }
+	.main-image-container {
+		width: 600px; /* Increased width */
+		height: 450px; /* Adjusted height */
+		overflow: hidden;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		margin: 0 auto; /* Center the main image container */
+		border: 2px solid var(--gold-color); /* Add border to main image container */
+		border-radius: 8px; /* Add border radius to main image container */
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow to main image container */
+	}
+	.main-image {
+		max-width: 100%;
+		max-height: 100%;
+		cursor: pointer;
+	}
+	.thumbnail-images {
+		display: flex;
+		gap: 10px;
+		justify-content: center; /* Center the thumbnails */
+	}
+	.thumbnail {
+		width: 80px;
+		height: 80px;
+		cursor: pointer;
+		object-fit: cover;
+		border: 2px solid var(--dark-gold-color); /* Add border to thumbnails */
+		border-radius: 8px; /* Add border radius to thumbnails */
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow to thumbnails */
+	}
+	.overlay {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(0, 0, 0, 0.8);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		visibility: hidden;
+		flex-direction: column;
+	}
+	.overlay img {
+		max-width: 90%;
+		max-height: 80%;
+	}
+	.nav-arrow {
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
+		font-size: 2rem;
+		color: white;
+		cursor: pointer;
+	}
+	.nav-left {
+		left: 10px;
+	}
+	.nav-right {
+		right: 10px;
+	}
+	.ingredients,
+	.steps-box {
+		width: 800px; /* Increased width */
+	}
+	.ingredients-list {
+		list-style-type: disc;
+		padding-left: 20px;
+	}
+	.ingredients-list li {
+		margin-bottom: 5px;
+		font-size: 1.1rem;
+		color: var(--dark-color);
+	}
+	.steps-guide {
+		display: block;
+		margin-top: 10px;
+		font-size: 1.1rem;
+		color: var(--dark-color);
+	}
+	.author-link {
+		text-decoration: none;
+		color: var(--dark-color);
+		font-weight: bold;
+	}
+	.author-link:hover {
+		color: var(--dark-gold-color);
+	}
+	.favorite-button {
+		margin-left: 20px;
+	}
+	.favorite-button:hover {
+		background-color: var(--dark-gold-color);
+	}
+	@media (max-width: 768px) {
+		.main-image-container,
+		.ingredients,
+		.steps-box {
+			width: 100%; /* Full width on smaller screens */
+		}
+	}
 </style>
 
-<script>
-  let images = {{ recipe.images | tojson }};
-  let currentIndex = 0;
+<script type="text/javascript" defer>
 
-  function changeMainImage(index) {
-  	currentIndex = index;
-  	document.getElementById("mainImage").src = images[index];
-  }
+	let images = {{ recipe.images | format_images | tojson }};
+	 let currentIndex = 0;
 
-  function openOverlay(index) {
-  	currentIndex = index;
-  	document.getElementById("overlayImage").src = images[index];
-  	document.getElementById("overlay").style.visibility = "visible";
-  }
+	function changeMainImage(index) {
+	  currentIndex = index;
+	  document.getElementById("mainImage").src = images[index];
+	}
 
-  function nextImage() {
-  	currentIndex = (currentIndex + 1) % images.length;
-  	document.getElementById("overlayImage").src = images[currentIndex];
-  }
+	function openOverlay(index) {
+	   currentIndex = index;
+	  document.getElementById("overlayImage").src = images[index];
+	  document.getElementById("overlay").style.visibility = "visible";
+	}
 
-  function prevImage() {
-  	currentIndex = (currentIndex - 1 + images.length) % images.length;
-  	document.getElementById("overlayImage").src = images[currentIndex];
-  }
+	function nextImage() {
+	   currentIndex = (currentIndex + 1) % images.length;
+	  document.getElementById("overlayImage").src = images[currentIndex];
+	}
 
-  document
-  	.getElementById("overlay")
-  	.addEventListener("click", function (event) {
-  		if (event.target === this) {
-  			this.style.visibility = "hidden";
-  		}
-  	});
+	function prevImage() {
+	   currentIndex = (currentIndex - 1 + images.length) % images.length;
+	  document.getElementById("overlayImage").src = images[currentIndex];
+	}
 
-  document.addEventListener("keydown", function (event) {
-  	if (event.key === "Escape") {
-  		document.getElementById("overlay").style.visibility = "hidden";
-  	}
-  });
+	document
+	 .getElementById("overlay")
+	 .addEventListener("click", function (event) {
+	   if (event.target === this) {
+	     this.style.visibility = "hidden";
+	    }
+	  });
 
-  function toggleFavorite() {
-  	const button = document.querySelector('.favorite-button');
-  	const icon = button.querySelector('i');
-  	button.classList.toggle('active');
-  	if (button.classList.contains('active')) {
-  		button.innerHTML = '<i class="bi bi-heart-fill"></i> Odebrat z oblíbených';
-  	} else {
-  		button.innerHTML = '<i class="bi bi-heart"></i> Přidat do oblíbených';
-  	}
-  	// Add logic to handle adding/removing from favorites
-  }
+	   document.addEventListener("keydown", function (event) {
+	     if (event.key === "Escape") {
+	       document.getElementById("overlay").style.visibility = "hidden";
+	     }
+	   });
+
+	   function toggleFavorite() {
+	      console.log('Favorite button clicked');
+	     const button = document.querySelector('.favorite-button');
+	     const icon = button.querySelector('i');
+	     button.classList.toggle('active');
+	     if (button.classList.contains('active')) {
+	       icon.classList.remove('bi-heart');
+	       icon.classList.add('bi-heart-fill');
+	       button.innerHTML = '<i class="bi bi-heart-fill"></i> Odebrat z oblíbených';
+	     } else {
+	       icon.classList.remove('bi-heart-fill');
+	       icon.classList.add('bi-heart');
+	       button.innerHTML = '<i class="bi bi-heart"></i> Přidat do oblíbených';
+	     }
+	     // Add logic to handle adding/removing from favorites
+	   }
 </script>
 {% endblock %}
