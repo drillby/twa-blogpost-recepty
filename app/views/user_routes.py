@@ -5,12 +5,12 @@ from io import BytesIO
 import pyzxcvbn
 import vercel_blob
 from flask import flash, redirect, render_template, request, url_for
-from flask_login import UserMixin, current_user, login_required, login_user, logout_user
+from flask_login import current_user, login_required, login_user, logout_user
 from PIL import Image, ImageDraw
 
-from app import app, db, login_manager, oauth
+from app import app, db, oauth
 
-from ..models.models import Recipe, RecipeImage, User, UserLikedRecipes
+from ..models.models import Recipe, User, UserLikedRecipes
 
 
 @app.context_processor

@@ -3,11 +3,10 @@ from io import BytesIO
 import vercel_blob
 from flask import flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
-from werkzeug.utils import secure_filename
 
 from app import app, db
 
-from ..models.models import Recipe, RecipeImage, User, UserLikedRecipes
+from ..models.models import Recipe, RecipeImage
 
 
 # create template filter

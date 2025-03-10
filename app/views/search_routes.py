@@ -2,7 +2,6 @@ import datetime
 import random
 import re
 
-from faker import Faker
 from flask import jsonify, redirect, render_template, request, url_for
 from fuzzywuzzy import fuzz
 from sqlalchemy.sql.expression import desc, func
