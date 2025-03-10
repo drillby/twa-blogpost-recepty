@@ -1,0 +1,3 @@
+User-agent: *
+Disallow:
+Sitemap: https://www.foodfinder.com/sitemap.xml
