@@ -252,16 +252,6 @@ def generate_test_data():
                 "ingredients": "Jablka, listové těsto, cukr, skořice",
                 "instructions": "Zabalte jablka do těsta a upečte.",
             },
-            {
-                "title": "Tiramisu",
-                "ingredients": "Mascarpone, vejce, piškoty, káva, kakao",
-                "instructions": "Poskládejte vrstvy a nechte ztuhnout.",
-            },
-            {
-                "title": "Palačinky",
-                "ingredients": "Mléko, mouka, vejce, cukr",
-                "instructions": "Usmažte tenké palačinky na pánvi.",
-            },
         ],
         "hlavni_jidla": [
             {
@@ -273,16 +263,6 @@ def generate_test_data():
                 "title": "Kuře na paprice",
                 "ingredients": "Kuřecí maso, paprika, smetana",
                 "instructions": "Orestujte maso a přidejte smetanovou omáčku.",
-            },
-            {
-                "title": "Guláš",
-                "ingredients": "Hovězí maso, cibule, paprika, brambory",
-                "instructions": "Vařte dlouho na mírném ohni.",
-            },
-            {
-                "title": "Rizoto",
-                "ingredients": "Rýže, kuřecí maso, zelenina",
-                "instructions": "Orestujte suroviny a vařte s vývarem.",
             },
         ],
         "napoje": [
@@ -296,16 +276,6 @@ def generate_test_data():
                 "ingredients": "Mléko, čokoláda, cukr",
                 "instructions": "Ohřejte mléko a rozmíchejte čokoládu.",
             },
-            {
-                "title": "Smoothie s banánem",
-                "ingredients": "Banán, mléko, med",
-                "instructions": "Rozmixujte do hladka.",
-            },
-            {
-                "title": "Mojito (nealko)",
-                "ingredients": "Máta, limetka, cukr, soda",
-                "instructions": "Rozmačkejte limetku a mátu, dolijte sodou.",
-            },
         ],
         "polevky": [
             {
@@ -318,18 +288,57 @@ def generate_test_data():
                 "ingredients": "Česnek, brambory, vývar",
                 "instructions": "Vařte vývar a přidejte česnek.",
             },
+        ],
+        "predkrmy": [
             {
-                "title": "Hrachová polévka",
-                "ingredients": "Sušený hrách, mrkev, brambory",
-                "instructions": "Vařte hrách a rozmixujte.",
+                "title": "Bruschetta",
+                "ingredients": "Chléb, rajčata, česnek, bazalka",
+                "instructions": "Opečte chléb, přidejte směs rajčat a česneku.",
             },
             {
-                "title": "Dýňová polévka",
-                "ingredients": "Dýně, smetana, koření",
-                "instructions": "Opečte dýni a rozmixujte.",
+                "title": "Caprese salát",
+                "ingredients": "Rajčata, mozzarella, bazalka",
+                "instructions": "Nakrájejte ingredience a servírujte s olivovým olejem.",
+            },
+        ],
+        "snidane": [
+            {
+                "title": "Vaječná omeleta",
+                "ingredients": "Vejce, mléko, sůl, pepř",
+                "instructions": "Rozšlehejte vejce a osmažte na pánvi.",
+            },
+            {
+                "title": "Ovesná kaše",
+                "ingredients": "Ovesné vločky, mléko, med",
+                "instructions": "Povařte vločky v mléce a oslaďte medem.",
+            },
+        ],
+        "svaciny": [
+            {
+                "title": "Jablko s arašídovým máslem",
+                "ingredients": "Jablko, arašídové máslo",
+                "instructions": "Nakrájejte jablko a podávejte s máslem.",
+            },
+            {
+                "title": "Tvaroh s ovocem",
+                "ingredients": "Tvaroh, jahody, med",
+                "instructions": "Smíchejte tvaroh s ovocem a oslaďte medem.",
+            },
+        ],
+        "vecere": [
+            {
+                "title": "Grilovaný losos",
+                "ingredients": "Losos, citron, bylinky",
+                "instructions": "Opečte lososa a dochuťte citronem.",
+            },
+            {
+                "title": "Zapečené brambory",
+                "ingredients": "Brambory, sýr, šunka",
+                "instructions": "Nakrájejte brambory a zapečte se sýrem a šunkou.",
             },
         ],
     }
+
     created_recipes = []
     user_map = {}
     all_recipes = []
