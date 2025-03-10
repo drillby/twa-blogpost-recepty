@@ -3,6 +3,7 @@ import random
 import re
 
 from flask import jsonify, redirect, render_template, request, url_for
+from flask_login import login_required
 from fuzzywuzzy import fuzz
 from sqlalchemy.sql.expression import desc, func
 
@@ -363,7 +364,7 @@ def generate_test_data():
             # Přidáme placeholder obrázek
             image = RecipeImage(
                 recipe_id=new_recipe.id,
-                image_url=f"https://placehold.co/300x200?text={recipe_data['title'].replace(' ', '+')}",
+                image_url=f"https://placehold.co/1000x200?text={recipe_data['title'].replace(' ', '+')}",
             )
             db.session.add(image)
 
@@ -389,3 +390,23 @@ def generate_test_data():
             "recipes": created_recipes,
         }
     )
+
+
+@login_required
+@app.route("/delete-all-data")
+def delete_all_data():
+    try:
+        # Smazání všech záznamů v databázi
+        db.session.query(UserLikedRecipes).delete()
+        db.session.query(RecipeImage).delete()
+        db.session.query(Recipe).delete()
+        db.session.query(User).delete()
+
+        # Uložíme změny
+        db.session.commit()
+
+        return jsonify({"message": "Všechna data byla úspěšně smazána!"})
+
+    except Exception as e:
+        db.session.rollback()  # Vrácení zpět v případě chyby
+        return jsonify({"error": str(e)}), 500
