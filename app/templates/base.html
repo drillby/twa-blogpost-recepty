@@ -48,6 +48,22 @@
 			rel="stylesheet"
 			href="{{ url_for('static', filename='css/base.css') }}"
 		/>
+		<script>
+			window.va =
+				window.va ||
+				function () {
+					(window.vaq = window.vaq || []).push(arguments);
+				};
+		</script>
+		<script defer src="/_vercel/insights/script.js"></script>
+		<script>
+			window.si =
+				window.si ||
+				function () {
+					(window.siq = window.siq || []).push(arguments);
+				};
+		</script>
+		<script defer src="/_vercel/speed-insights/script.js"></script>
 		<title>{% block title %}Název stránky{% endblock %}</title>
 	</head>
 	<body style="display: flex; flex-direction: column; min-height: 100vh">
