@@ -263,68 +263,153 @@ def index():
 
 @app.route("/generate-test-data")
 def generate_test_data():
-    user = request.args.get("user", 0, type=int)
-    recipe = request.args.get("recipe", 0, type=int)
+    test_data = {
+        "dezerty": [
+            {
+                "title": "Čokoládový dort",
+                "ingredients": "Čokoláda, mouka, cukr, vejce, máslo",
+                "instructions": "Smíchejte ingredience a upečte na 180°C.",
+            },
+            {
+                "title": "Jablečný štrůdl",
+                "ingredients": "Jablka, listové těsto, cukr, skořice",
+                "instructions": "Zabalte jablka do těsta a upečte.",
+            },
+            {
+                "title": "Tiramisu",
+                "ingredients": "Mascarpone, vejce, piškoty, káva, kakao",
+                "instructions": "Poskládejte vrstvy a nechte ztuhnout.",
+            },
+            {
+                "title": "Palačinky",
+                "ingredients": "Mléko, mouka, vejce, cukr",
+                "instructions": "Usmažte tenké palačinky na pánvi.",
+            },
+        ],
+        "hlavni_jidla": [
+            {
+                "title": "Svíčková na smetaně",
+                "ingredients": "Hovězí maso, smetana, kořenová zelenina",
+                "instructions": "Uvařte maso a připravte omáčku.",
+            },
+            {
+                "title": "Kuře na paprice",
+                "ingredients": "Kuřecí maso, paprika, smetana",
+                "instructions": "Orestujte maso a přidejte smetanovou omáčku.",
+            },
+            {
+                "title": "Guláš",
+                "ingredients": "Hovězí maso, cibule, paprika, brambory",
+                "instructions": "Vařte dlouho na mírném ohni.",
+            },
+            {
+                "title": "Rizoto",
+                "ingredients": "Rýže, kuřecí maso, zelenina",
+                "instructions": "Orestujte suroviny a vařte s vývarem.",
+            },
+        ],
+        "napoje": [
+            {
+                "title": "Domácí limonáda",
+                "ingredients": "Citrony, voda, cukr, led",
+                "instructions": "Smíchejte a podávejte chlazené.",
+            },
+            {
+                "title": "Horká čokoláda",
+                "ingredients": "Mléko, čokoláda, cukr",
+                "instructions": "Ohřejte mléko a rozmíchejte čokoládu.",
+            },
+            {
+                "title": "Smoothie s banánem",
+                "ingredients": "Banán, mléko, med",
+                "instructions": "Rozmixujte do hladka.",
+            },
+            {
+                "title": "Mojito (nealko)",
+                "ingredients": "Máta, limetka, cukr, soda",
+                "instructions": "Rozmačkejte limetku a mátu, dolijte sodou.",
+            },
+        ],
+        "polevky": [
+            {
+                "title": "Rajská polévka",
+                "ingredients": "Rajčata, cibule, koření",
+                "instructions": "Povařte rajčata a rozmixujte.",
+            },
+            {
+                "title": "Česnečka",
+                "ingredients": "Česnek, brambory, vývar",
+                "instructions": "Vařte vývar a přidejte česnek.",
+            },
+            {
+                "title": "Hrachová polévka",
+                "ingredients": "Sušený hrách, mrkev, brambory",
+                "instructions": "Vařte hrách a rozmixujte.",
+            },
+            {
+                "title": "Dýňová polévka",
+                "ingredients": "Dýně, smetana, koření",
+                "instructions": "Opečte dýni a rozmixujte.",
+            },
+        ],
+    }
+    created_recipes = []
+    user_map = {}
+    all_recipes = []
 
-    fake = Faker()
-    users = []
-    recipes = []
-
-    # Vytvoření uživatelů
-    for _ in range(user):
+    # Vytvoříme uživatele pro každou kategorii
+    for category in test_data.keys():
         user = User(
-            username=fake.user_name(),
-            email=fake.email(),
-            password=fake.password(),  # Default heslo pro všechny (hash se generuje v User modelu)
-            profile_picture_url=fake.image_url(),
+            username=f"{category}_chef",
+            email=f"{category}@test.com",
+            password="testpassword",
+            profile_picture_url=f"https://placehold.co/100x100?text={category}+Chef",
         )
         db.session.add(user)
-        users.append(user)
+        db.session.commit()
+        user_map[category] = user.id  # Uložíme ID uživatele pro danou kategorii
 
-    db.session.commit()  # Uložíme uživatele do DB, aby měly ID
+    # Vytvoříme recepty a přiřadíme je k uživatelům
+    for category, recipes in test_data.items():
+        author_id = user_map[category]
+        for recipe_data in recipes:
+            new_recipe = Recipe(
+                title=recipe_data["title"],
+                ingredients=recipe_data["ingredients"],
+                instructions=recipe_data["instructions"],
+                tag=category,
+                author_id=author_id,
+            )
+            db.session.add(new_recipe)
+            db.session.commit()
+            all_recipes.append(new_recipe)
 
-    # Vytvoření receptů
-    for _ in range(recipe):
-        recipe = Recipe(
-            title=fake.sentence(nb_words=4),
-            author_id=random.choice(users).id,
-            instructions=fake.text(),
-            ingredients=fake.text(),
-            tag=random.choice(
-                [
-                    "dezerty",
-                    "hlavni_jidla",
-                    "napoje",
-                    "polevky",
-                    "predkrmy",
-                    "snidane",
-                    "svaciny",
-                    "vecere",
-                ]
-            ),
-        )
-        db.session.add(recipe)
-        recipes.append(recipe)
-
-    db.session.commit()  # Uložíme recepty do DB, aby měly ID
-
-    # Přidání obrázků k receptům
-    for recipe in recipes:
-        num_images = random.randint(1, 5)
-        for _ in range(num_images):
-            image = RecipeImage(recipe_id=recipe.id, image_url=fake.image_url())
+            # Přidáme placeholder obrázek
+            image = RecipeImage(
+                recipe_id=new_recipe.id,
+                image_url=f"https://placehold.co/300x200?text={recipe_data['title'].replace(' ', '+')}",
+            )
             db.session.add(image)
+
+            created_recipes.append(new_recipe.title)
 
     db.session.commit()
 
-    # Přidání oblíbených receptů
-    for user in users:
+    # Každý uživatel si náhodně oblíbí několik receptů
+    all_recipe_ids = [r.id for r in all_recipes]
+    for user_id in user_map.values():
         liked_recipes = random.sample(
-            recipes, k=random.randint(1, min(5, len(recipes)))
-        )
-        for recipe in liked_recipes:
-            like_entry = UserLikedRecipes(user_id=user.id, recipe_id=recipe.id)
+            all_recipe_ids, k=random.randint(2, 5)
+        )  # Každý si oblíbí 2 až 5 receptů
+        for recipe_id in liked_recipes:
+            like_entry = UserLikedRecipes(user_id=user_id, recipe_id=recipe_id)
             db.session.add(like_entry)
 
     db.session.commit()
-    return "Testovací data byla vygenerována"
+
+    return jsonify(
+        {
+            "message": "Testovací recepty a uživatelé byli vytvořeni!",
+            "recipes": created_recipes,
+        }
+    )
