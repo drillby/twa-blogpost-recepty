@@ -55,7 +55,6 @@ def generate_avatar(identifier, size=8, scale=32, output_size=256):
 
 @app.route("/login/google")
 def login_google():
-    # print(url_for("auth_google", _external=True))
     if current_user.is_authenticated:
         return redirect(url_for("index"))
     return oauth.TWA_Blogpost.authorize_redirect(

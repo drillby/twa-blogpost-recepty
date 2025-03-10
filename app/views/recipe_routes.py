@@ -20,7 +20,6 @@ def format_images(images):
 @app.route("/recipe/<int:id>")
 def recipe_detail(id):
     recipe = db.session.query(Recipe).get_or_404(id)
-    print(recipe.images)
 
     related_recipes = (
         Recipe.query.filter(Recipe.tag == recipe.tag, Recipe.id != recipe.id)
