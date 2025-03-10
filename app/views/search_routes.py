@@ -128,7 +128,7 @@ def index():
     if 0 < client_time < 9:
         searching_tag = "snidane"
     elif client_time < 11:
-        searching_tag = "svacina"
+        searching_tag = "svaciny"
     elif client_time < 13:
         searching_tag = "hlavni_jidla"
     elif client_time < 15:
@@ -139,13 +139,11 @@ def index():
         searching_tag = "vecere"
 
     recipes_featured = Recipe.query.filter(Recipe.tag == searching_tag).order_by(func.random()).limit(4).all()
-
       # Newest recepies 
     page = request.args.get("page", 1, type=int)
     per_page = 10
 
     recipes_paginated = Recipe.query.order_by(desc(Recipe.created_at)).paginate(page=page, per_page=per_page, error_out=False)
-
 
 
     return render_template("index.html", recipes=recipes_paginated.items, recipes_featured=recipes_featured, next_page=recipes_paginated.next_num if recipes_paginated.has_next else None)
