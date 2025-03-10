@@ -5,7 +5,7 @@
 	href="{{ url_for('static', filename='css/profile.css') }}"
 />
 <div class="container mt-4">
-	<div class="profile-header d-flex align-items-center mb-4">
+	<div class="profile-header d-flex flex-wrap align-items-center mb-4">
 		<img
 			src="{{user.profile_picture_url}}"
 			alt="Profilový obrázek"
@@ -23,7 +23,7 @@
 		></a>
 		<a
 			href="{{ url_for('add_recipe') }}"
-			class="nav-link btn btn-secondary ms-auto px-3 py-2"
+			class="nav-link btn btn-secondary ms-2 px-3 py-2 col-12 col-md-auto mt-2 mt-md-0"
 		>
 			Přidat nový recept
 		</a>
@@ -32,7 +32,7 @@
 	{% if user.id == user_info.id %}
 	<h1>Oblíbené recepty</h1>
 	<div
-		class="row row-cols-1 row-cols-md-2 row-cols-lg-4 justify-content-center mb-4"
+		class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3 justify-content-center mb-4"
 	>
 		{% set empty_cards=4 %} {% if user.liked_recipes|length == 0%}
 		<div class="col d-flex justify-content-center">
@@ -41,7 +41,7 @@
 		{% set empty_cards=3 %} {% endif %} {% for recipe in user.liked_recipes %}
 		{% include "featured-card.html"%} {% endfor %} {% for _ in
 		range([empty_cards - user.liked_recipes|length, 0] | max) %}
-		<div class="col d-flex justify-content-center hidden-col">
+		<div class="col d-none">
 			<div class="featured-card h-100">
 				<img
 					src="https://placehold.co/600x400"
