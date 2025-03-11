@@ -70,8 +70,9 @@ def toggle_favorite(recipe_id):
 
 
 
-@login_required
+
 @app.route("/add-recipe", methods=["GET", "POST"])
+@login_required
 def add_recipe():
     if request.method == "POST":
         # logika pro pridani receptu
