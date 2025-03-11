@@ -1,0 +1,14 @@
+{% extends "base.html" %} {% block title %}Chyba {{ error_code }}{% endblock %}
+{% block content %}
+<link
+	rel="stylesheet"
+	href="{{ url_for('static', filename='css/error.css') }}"
+/>
+<div class="error-page text-center">
+	<h1 class="display-1 text-danger">Chyba {{ error_code }}</h1>
+	<p class="lead text-dark">{{ error_message }}</p>
+	<a href="{{ url_for('index') }}" class="nav-link btn btn-secondary py-2"
+		>Zpět na hlavní stránku</a
+	>
+</div>
+{% endblock %}
