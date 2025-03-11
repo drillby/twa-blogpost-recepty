@@ -1,14 +1,12 @@
 from io import BytesIO
 
 import vercel_blob
-from flask import flash, redirect, render_template, request, url_for, jsonify
+from flask import flash, jsonify, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
 
 from app import app, db
 
 from ..models.models import Recipe, RecipeImage, UserLikedRecipes
-
-
 
 
 # create template filter
@@ -24,13 +22,19 @@ def recipe_detail(id):
 
     related_recipes = (
         Recipe.query.filter(Recipe.tag == recipe.tag, Recipe.id != recipe.id)
+        .order_by(db.func.random())
         .limit(4)
         .all()
     )
 
     # Check if the current user has liked the recipe
     if current_user.is_authenticated:
-        is_favorited = UserLikedRecipes.query.filter_by(user_id=current_user.id, recipe_id=id).first() is not None
+        is_favorited = (
+            UserLikedRecipes.query.filter_by(
+                user_id=current_user.id, recipe_id=id
+            ).first()
+            is not None
+        )
     else:
         is_favorited = False
 
@@ -42,7 +46,6 @@ def recipe_detail(id):
     )
 
 
-
 @app.route("/toggle-favorite/<int:recipe_id>", methods=["POST"])
 @login_required
 def toggle_favorite(recipe_id):
@@ -51,7 +54,9 @@ def toggle_favorite(recipe_id):
     recipe = Recipe.query.get_or_404(recipe_id)
 
     # Check if the recipe is already liked by the user
-    liked_recipe = UserLikedRecipes.query.filter_by(user_id=user_id, recipe_id=recipe_id).first()
+    liked_recipe = UserLikedRecipes.query.filter_by(
+        user_id=user_id, recipe_id=recipe_id
+    ).first()
 
     if liked_recipe:
         # If already liked, remove from favorites
@@ -59,16 +64,22 @@ def toggle_favorite(recipe_id):
         db.session.commit()
         return jsonify({"status": "removed"})
     else:
-        #If user adding his own recipe, return error
+        # If user adding his own recipe, return error
         if recipe.author_id == user_id:
-            return jsonify({"status": "error", "message": "Nemůžete přidat vlastní recept do oblíbených"}), 400
+            return (
+                jsonify(
+                    {
+                        "status": "error",
+                        "message": "Nemůžete přidat vlastní recept do oblíbených",
+                    }
+                ),
+                400,
+            )
         # If not liked, add to favorites
         new_like = UserLikedRecipes(user_id=user_id, recipe_id=recipe_id)
         db.session.add(new_like)
         db.session.commit()
         return jsonify({"status": "added"})
-
-
 
 
 @app.route("/add-recipe", methods=["GET", "POST"])
