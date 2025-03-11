@@ -19,7 +19,6 @@ def format_images(images):
 
 
 @app.route("/recipe/<int:id>")
-@login_required
 def recipe_detail(id):
     recipe = Recipe.query.get_or_404(id)
 
@@ -30,7 +29,10 @@ def recipe_detail(id):
     )
 
     # Check if the current user has liked the recipe
-    is_favorited = UserLikedRecipes.query.filter_by(user_id=current_user.id, recipe_id=id).first() is not None
+    if current_user.is_authenticated:
+        is_favorited = UserLikedRecipes.query.filter_by(user_id=current_user.id, recipe_id=id).first() is not None
+    else:
+        is_favorited = False
 
     return render_template(
         "recipe-detail.html",
