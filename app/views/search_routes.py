@@ -199,9 +199,8 @@ def index():
         except ValueError:
             print("Neplatná hodnota času, používám serverový čas.")
             client_time = datetime.datetime.now().hour
-
     searching_tag = ""
-    if 0 < client_time < 9:
+    if 0 <= client_time < 9:
         searching_tag = "snidane"
     elif client_time < 11:
         searching_tag = "svaciny"
@@ -210,7 +209,7 @@ def index():
     elif client_time < 15:
         searching_tag = "dezerty"
     elif client_time < 17:
-        searching_tag = "svacina"
+        searching_tag = "svaciny"
     else:
         searching_tag = "vecere"
 
