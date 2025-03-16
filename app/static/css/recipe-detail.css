@@ -29,6 +29,9 @@
 	border-radius: 8px; /* Add border radius to thumbnails */
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow to thumbnails */
 }
+.thumbnail:hover {
+	border-color: var(--gold-color); /* Change border color on hover */
+}
 .overlay {
 	position: fixed;
 	top: 0;
@@ -62,7 +65,8 @@
 }
 .ingredients,
 .steps-box {
-	width: 800px; /* Increased width */
+	width: 100%; /* Increased width */
+	padding: 15px;
 }
 .ingredients-list {
 	list-style-type: disc;
@@ -70,28 +74,54 @@
 }
 .ingredients-list li {
 	margin-bottom: 5px;
-	font-size: 1.1rem;
+	font-size: 1.0rem;
 	color: var(--dark-color);
 }
-.steps-guide {
+.steps-guide p {
 	display: block;
 	margin-top: 10px;
 	font-size: 1.1rem;
 	color: var(--dark-color);
+	line-height: 1.5;
+	margin: 0;
+	white-space: pre-wrap; /* Zachová nové řádky a zalamuje dlouhé řádky */
+    word-wrap: break-word; /* Zalamuje slova, pokud jsou příliš dlouhá */
+}
+.step-number {
+    display: inline-block;
+    width: 20px; /* Fixní šířka pro zarovnání čísel */
+    font-weight: bold; /* Volitelné - zvýrazní čísla */
 }
 .author-link {
-	text-decoration: none;
-	color: var(--dark-color);
+    text-decoration: none;
+    color: var(--dark-color);
 	font-weight: bold;
 }
-.author-link:hover {
-	color: var(--dark-gold-color);
+
+.author-link img {
+    transition: transform 0.3s ease;
+}
+
+.author-link:hover img {
+    transform: scale(1.1); /* Zvětšení obrázku o 10 % */
 }
 .favorite-button {
 	margin-left: 20px;
 }
 .favorite-button:hover {
-	background-color: var(--dark-gold-color);
+	background-color: var(--black-color);
+}
+.steps-box .btn-outline-secondary {
+	margin-top: 20px;
+	font-size: 1rem;
+	color: var(--dark-color);
+	border: 1px solid var(--dark-color);
+	background-color: var(--gold-color);
+	transition: all 0.3s ease;	
+}
+.steps-box .btn-outline-secondary:hover {
+	color: var(--gold-color);
+	background-color: var(--dark-color);
 }
 @media (max-width: 768px) {
 	.main-image-container,
@@ -99,4 +129,85 @@
 	.steps-box {
 		width: 100%; /* Full width on smaller screens */
 	}
+	.steps-guide {
+		font-size: 1rem; /* Decrease font size */
+	}
+}
+.recipe-card.w-100.mb-4:hover {
+	transform: scale(1.02);
+}
+@media print {
+    /* Skryjeme všechny nepotřebné prvky */
+    body > *:not(.content-container),
+    .content-container > *:not(.container),
+    nav.navbar-custom,
+    footer.footer-custom,
+    .container > .d-flex,
+    .container > .image-box,
+    .container > .related-recipes,
+    .container > #overlay,
+    .container .steps-box .btn {
+        display: none !important;
+    }
+
+    /* Zobrazíme pouze potřebné prvky */
+    body,
+    .content-container,
+    .container,
+    .container > h1,
+    .container > .row.clearfix,
+    .container > .row.clearfix > .col-md-4.ingredients,
+    .container > .row.clearfix > .col-12.steps-box {
+        display: block !important;
+    }
+
+    /* Specifické styly pro tisk */
+    .container > h1 {
+        font-size: 14px;
+        margin-bottom: 15px;
+    }
+
+    .container > .row.clearfix > .col-md-4.ingredients {
+        padding: 0;
+        margin-bottom: 15px;
+    }
+
+    .container > .row.clearfix > .col-12.steps-box {
+        padding: 0;
+        width: 100%;
+    }
+
+    .steps-box .steps-guide {
+        padding: 0;
+    }
+
+    .steps-guide .step-line {
+        font-size: 14px;
+        margin-bottom: 8px;
+    }
+
+    .step-line .step-number {
+        color: #000;
+    }
+
+    .ingredients .ingredients-list {
+        padding-left: 20px;
+    }
+
+    /* Odstraníme zbytečné okraje */
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Zajistíme správné zobrazení */
+    .container > .row.clearfix {
+        display: block;
+    }
+
+    .container > .row.clearfix > .col-md-4,
+    .container > .row.clearfix > .col-12 {
+        width: 100%;
+        padding: 0;
+    }
 }
