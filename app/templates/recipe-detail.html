@@ -22,11 +22,12 @@
 					</a>
 				</p>
 			</div>
+			{% if user_info %}
 			<button class="favorite-button" data-recipe-id="{{ recipe.id }}">
 				<i class="bi {% if is_favorited %}bi-heart-fill{% else %}bi-heart{% endif %}"></i>
 				{% if is_favorited %} Odebrat z oblíbených {% else %} Přidat do oblíbených {% endif %}
 			</button>
-			
+			{% endif %}
 		</div>
 		<div class="image-box mb-4">
 			<div class="main-image-container mx-auto">
@@ -61,7 +62,10 @@
 				</ul>
 			</div>
 			<div class="col-12 steps steps-box">
-				<h4>Postup <button class="btn btn-outline-secondary btn-sm float-end" onclick="window.print()">Vytisknout recept</button></h4>
+				<h4>Postup</h4>
+				{% if user_info %}
+				<button class="btn btn-outline-secondary btn-sm float-end px-2 py-2" onclick="window.print()">Vytisknout recept</button>
+				{% endif %}
 				<div class="steps-guide">
 					{% set counter = namespace(value=1) %}
 					{% for line in recipe.instructions.split("\n") %}
