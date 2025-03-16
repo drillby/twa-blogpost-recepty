@@ -5,16 +5,7 @@
 	--dark-gold-color: #b8860b;
 	--light-gray-color: #fafafa; /* Slightly darker than white */
 }
-.container {
-    background-color: #f8f9fa;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-h1 {
-    color: var(--dark-color);
-    font-weight: bold;
-}
+
 .navbar-custom {
 	background-color: var(--gold-color);
 	width: 100%;

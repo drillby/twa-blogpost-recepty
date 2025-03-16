@@ -10,6 +10,16 @@
 	border-radius: 8px; /* Add border radius to main image container */
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow to main image container */
 }
+.container {
+    background-color: #f8f9fa;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+h1 {
+    color: var(--dark-color);
+    font-weight: bold;
+}
 .main-image {
 	max-width: 100%;
 	max-height: 100%;
@@ -133,81 +143,35 @@
 		font-size: 1rem; /* Decrease font size */
 	}
 }
-.recipe-card.w-100.mb-4:hover {
-	transform: scale(1.02);
-}
+
 @media print {
-    /* Skryjeme všechny nepotřebné prvky */
-    body > *:not(.content-container),
-    .content-container > *:not(.container),
-    nav.navbar-custom,
-    footer.footer-custom,
-    .container > .d-flex,
-    .container > .image-box,
-    .container > .related-recipes,
-    .container > #overlay,
-    .container .steps-box .btn {
+    /* Odstranění stínu, ohraničení a pozadí kontejneru */
+	.container {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+		background: none !important;
+        box-shadow: none !important;
+        border: none !important;
+    }
+    /* Roztáhnutí textu v ingrediencích a postupu */
+    .ingredients,
+    .steps-box {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 10px !important;
+    }
+    /* Skrytí hlavičky, zápatí, autora, obrázků, nadpisu, tlačítka oblíbených a podobných receptů */
+    nav, /* horní menu */
+    footer, /* patička stránky */
+    .d-flex,  /* obsahuje autora a tlačítko oblíbených */
+    .related-recipes, /* podobné recepty */
+    .image-box, /* hlavní obrázek receptu */
+    .thumbnail-images, /* náhledové obrázky */
+    .author-link, /* odkaz na autora */
+    .favorite-button,  /* tlačítko oblíbených */
+	.btn-outline-secondary {
         display: none !important;
-    }
-
-    /* Zobrazíme pouze potřebné prvky */
-    body,
-    .content-container,
-    .container,
-    .container > h1,
-    .container > .row.clearfix,
-    .container > .row.clearfix > .col-md-4.ingredients,
-    .container > .row.clearfix > .col-12.steps-box {
-        display: block !important;
-    }
-
-    /* Specifické styly pro tisk */
-    .container > h1 {
-        font-size: 14px;
-        margin-bottom: 15px;
-    }
-
-    .container > .row.clearfix > .col-md-4.ingredients {
-        padding: 0;
-        margin-bottom: 15px;
-    }
-
-    .container > .row.clearfix > .col-12.steps-box {
-        padding: 0;
-        width: 100%;
-    }
-
-    .steps-box .steps-guide {
-        padding: 0;
-    }
-
-    .steps-guide .step-line {
-        font-size: 14px;
-        margin-bottom: 8px;
-    }
-
-    .step-line .step-number {
-        color: #000;
-    }
-
-    .ingredients .ingredients-list {
-        padding-left: 20px;
-    }
-
-    /* Odstraníme zbytečné okraje */
-    body {
-        margin: 0;
-        padding: 0;
-    }
-
-    /* Zajistíme správné zobrazení */
-    .container > .row.clearfix {
-        display: block;
-    }
-
-    .container > .row.clearfix > .col-md-4,
-    .container > .row.clearfix > .col-12 {
-        width: 100%;
-        padding: 0;
     }
 }
