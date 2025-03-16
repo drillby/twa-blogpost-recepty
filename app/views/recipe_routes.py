@@ -141,6 +141,8 @@ def add_recipe():
                     )
                     db.session.add(recipe_image)
                 except Exception as e:
+                    db.session.delete(new_recipe)
+                    db.session.commit()
                     flash(f"Chyba při nahrávání obrázku: {str(e)}", "danger")
                     return redirect(url_for("add_recipe"))
             else:
