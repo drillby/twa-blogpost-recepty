@@ -10,6 +10,16 @@
 	border-radius: 8px; /* Add border radius to main image container */
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow to main image container */
 }
+.container {
+    background-color: #f8f9fa;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+h1 {
+    color: var(--dark-color);
+    font-weight: bold;
+}
 .main-image {
 	max-width: 100%;
 	max-height: 100%;
@@ -28,6 +38,9 @@
 	border: 2px solid var(--dark-gold-color); /* Add border to thumbnails */
 	border-radius: 8px; /* Add border radius to thumbnails */
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow to thumbnails */
+}
+.thumbnail:hover {
+	border-color: var(--gold-color); /* Change border color on hover */
 }
 .overlay {
 	position: fixed;
@@ -62,7 +75,8 @@
 }
 .ingredients,
 .steps-box {
-	width: 800px; /* Increased width */
+	width: 100%; /* Increased width */
+	padding: 15px;
 }
 .ingredients-list {
 	list-style-type: disc;
@@ -70,28 +84,54 @@
 }
 .ingredients-list li {
 	margin-bottom: 5px;
-	font-size: 1.1rem;
+	font-size: 1.0rem;
 	color: var(--dark-color);
 }
-.steps-guide {
+.steps-guide p {
 	display: block;
 	margin-top: 10px;
 	font-size: 1.1rem;
 	color: var(--dark-color);
+	line-height: 1.5;
+	margin: 0;
+	white-space: pre-wrap; /* Zachová nové řádky a zalamuje dlouhé řádky */
+    word-wrap: break-word; /* Zalamuje slova, pokud jsou příliš dlouhá */
+}
+.step-number {
+    display: inline-block;
+    width: 20px; /* Fixní šířka pro zarovnání čísel */
+    font-weight: bold; /* Volitelné - zvýrazní čísla */
 }
 .author-link {
-	text-decoration: none;
-	color: var(--dark-color);
+    text-decoration: none;
+    color: var(--dark-color);
 	font-weight: bold;
 }
-.author-link:hover {
-	color: var(--dark-gold-color);
+
+.author-link img {
+    transition: transform 0.3s ease;
+}
+
+.author-link:hover img {
+    transform: scale(1.1); /* Zvětšení obrázku o 10 % */
 }
 .favorite-button {
 	margin-left: 20px;
 }
 .favorite-button:hover {
-	background-color: var(--dark-gold-color);
+	background-color: var(--black-color);
+}
+.steps-box .btn-outline-secondary {
+	margin-top: 20px;
+	font-size: 1rem;
+	color: var(--dark-color);
+	border: 1px solid var(--dark-color);
+	background-color: var(--gold-color);
+	transition: all 0.3s ease;	
+}
+.steps-box .btn-outline-secondary:hover {
+	color: var(--gold-color);
+	background-color: var(--dark-color);
 }
 @media (max-width: 768px) {
 	.main-image-container,
@@ -99,4 +139,39 @@
 	.steps-box {
 		width: 100%; /* Full width on smaller screens */
 	}
+	.steps-guide {
+		font-size: 1rem; /* Decrease font size */
+	}
+}
+
+@media print {
+    /* Odstranění stínu, ohraničení a pozadí kontejneru */
+	.container {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+		background: none !important;
+        box-shadow: none !important;
+        border: none !important;
+    }
+    /* Roztáhnutí textu v ingrediencích a postupu */
+    .ingredients,
+    .steps-box {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 10px !important;
+    }
+    /* Skrytí hlavičky, zápatí, autora, obrázků, nadpisu, tlačítka oblíbených a podobných receptů */
+    nav, /* horní menu */
+    footer, /* patička stránky */
+    .d-flex,  /* obsahuje autora a tlačítko oblíbených */
+    .related-recipes, /* podobné recepty */
+    .image-box, /* hlavní obrázek receptu */
+    .thumbnail-images, /* náhledové obrázky */
+    .author-link, /* odkaz na autora */
+    .favorite-button,  /* tlačítko oblíbených */
+	.btn-outline-secondary {
+        display: none !important;
+    }
 }

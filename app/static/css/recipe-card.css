@@ -2,6 +2,7 @@
 	border-radius: 8px; /* Round the corners a bit */
 	box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); /* Make shadow more pronounced */
 	overflow: hidden; /* Ensure content stays within rounded corners */
+	transition: transform 0.3s, box-shadow 0.3s;
 }
 .recipe-card-img-top {
 	height: 18rem; /* Increase the height for the image */
@@ -10,4 +11,7 @@
 .recipe-card-title {
 	font-weight: bold;
 	color: var(--dark-color); /* Use the dark color variable */
+}
+.recipe-card:hover {
+	transform: scale(1.02);
 }

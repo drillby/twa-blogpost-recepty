@@ -56,11 +56,13 @@ body {
 	cursor: pointer;
 	border-radius: 5px;
 	font-size: 1rem;
+	transition: all 0.3s ease;
 }
 .favorite-button:hover {
-	background-color: var(--dark-gold-color);
+	background-color: var(--black-color);
 	color: var(--gold-color);
 }
+
 @media (max-width: 576px) {
 	.navbar-custom .container-fluid {
 		flex-direction: column;

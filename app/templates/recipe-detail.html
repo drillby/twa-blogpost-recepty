@@ -1,87 +1,105 @@
 {% extends "base.html" %} {% block title %}Detail receptu{% endblock %} {% block
-content %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/recipe-detail.css') }}" />
-<div class="container mt-4">
-	<h1>{{ recipe.title }}</h1>
-	<div class="d-flex justify-content-between align-items-center mb-4">
-		<div>
-			<p>
-				Přidal
-				<a
-					href="{{url_for('profile', id=recipe.author.id)}}"
-					class="author-link"
-				>
-					<img
-						src="{{ recipe.author.profile_picture_url }}"
-						alt="{{ recipe.author_name }}"
-						class="rounded-circle"
-						width="50"
-						height="50"
-					/>
-					{{ recipe.author_name }}
-				</a>
-			</p>
+	content %}
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/recipe-detail.css') }}" />
+	<div class="container mt-4">
+		<h1>{{ recipe.title }}</h1>
+		<div class="d-flex justify-content-between align-items-center mb-4">
+			<div>
+				<p>
+					Přidal
+					<a
+						href="{{url_for('profile', id=recipe.author.id)}}"
+						class="author-link"
+					>
+						<img
+							src="{{ recipe.author.profile_picture_url }}"
+							alt="{{ recipe.author_name }}"
+							class="rounded-circle"
+							width="50"
+							height="50"
+						/>
+						{{ recipe.author_name }}
+					</a>
+				</p>
+			</div>
+			{% if user_info %}
+			<button class="favorite-button" data-recipe-id="{{ recipe.id }}">
+				<i class="bi {% if is_favorited %}bi-heart-fill{% else %}bi-heart{% endif %}"></i>
+				{% if is_favorited %} Odebrat z oblíbených {% else %} Přidat do oblíbených {% endif %}
+			</button>
+			{% endif %}
 		</div>
-		<button class="favorite-button" data-recipe-id="{{ recipe.id }}">
-			<i class="bi {% if is_favorited %}bi-heart-fill{% else %}bi-heart{% endif %}"></i>
-			{% if is_favorited %} Odebrat z oblíbených {% else %} Přidat do oblíbených {% endif %}
-		</button>
-		
+		<div class="image-box mb-4">
+			<div class="main-image-container mx-auto">
+				<img
+					id="mainImage"
+					src="{{ recipe.images.0.image_url }}"
+					alt="{{ recipe.title }}"
+					class="img-fluid main-image"
+					onclick="openOverlay(currentIndex)"
+				/>
+			</div>
+			<div class="thumbnail-images mt-2 d-flex justify-content-center">
+				{% for image in recipe.images %}
+				<img
+					src="{{ image.image_url }}"
+					alt="{{ recipe.title }} - Image {{ loop.index }}"
+					class="img-fluid thumbnail"
+					onclick="changeMainImage({{ loop.index0 }})"
+				/>
+				{% endfor %}
+			</div>
+		</div>
+		<div class="row clearfix">
+			<div class="col-md-4 ingredients">
+				<h4>Potřebné suroviny</h4>
+				<ul class="ingredients-list">
+					{% for ingredient in recipe.ingredients.split("\n") %}
+					{% if ingredient.strip() %}
+					<li>{{ ingredient }}</li>
+					{% endif %}
+					{% endfor %}
+				</ul>
+			</div>
+			<div class="col-12 steps steps-box">
+				<h4>Postup</h4>
+				{% if user_info %}
+				<button class="btn btn-outline-secondary btn-sm float-end px-2 py-2" onclick="window.print()">Vytisknout recept</button>
+				{% endif %}
+				<div class="steps-guide">
+					{% set counter = namespace(value=1) %}
+					{% for line in recipe.instructions.split("\n") %}
+						{% if line.strip() %}
+							{% if ":" in line %}
+								<p class="step-line"><span class="step-number">{{ counter.value }}.</span> {{ line.strip() }}</p>
+								{% set counter.value = counter.value + 1 %}
+							{% else %}
+								<p class="step-line">{{ line.strip() }}</p>
+							{% endif %}
+						{% endif %}
+					{% endfor %}
+				</div>
+			</div>
+		</div>
 	</div>
-	<div class="image-box mb-4">
-		<div class="main-image-container mx-auto">
-			<img
-				id="mainImage"
-				src="{{ recipe.images.0.image_url }}"
-				alt="{{ recipe.title }}"
-				class="img-fluid main-image"
-				onclick="openOverlay(currentIndex)"
-			/>
-		</div>
-		<div class="thumbnail-images mt-2 d-flex justify-content-center">
-			{% for image in recipe.images %}
-			<img
-				src="{{ image.image_url }}"
-				alt="{{ recipe.title }} - Image {{ loop.index }}"
-				class="img-fluid thumbnail"
-				onclick="changeMainImage({{ loop.index0 }})"
-			/>
-			{% endfor %}
+		<div class="related-recipes">
+			<h4>Podobné recepty</h4>
+			<div id="recipe-list">
+				{% for recipe in related_recipes %} {% include "recipe-card.html" %} {% endfor %}
+			</div>
 		</div>
 	</div>
-	<div class="clearfix">
-		<div class="ingredients">
-			<h4>Potřebné suroviny</h4>
-      <ul class="ingredients-list"></ul>
-        {% for ingredient in recipe.ingredients.split("\n") %}
-        {% if ingredient.strip() %}
-        <li>{{ ingredient }}</li>
-        {% endif %}
-        {% endfor %}
-      </ul>
-		</div>
-		<div class="steps steps-box">
-			<h4>Postup</h4>
-			<p class="steps-guide">{{ recipe.instructions }}</p>
-		</div>
+	
+	<div id="overlay" class="overlay">
+		<span class="nav-arrow nav-left" onclick="prevImage()">&#9664;</span>
+		<img id="overlayImage" src="" alt="Overlay Image" />
+		<span class="nav-arrow nav-right" onclick="nextImage()">&#9654;</span>
 	</div>
-	<div class="related-recipes">
-		<h4>Podobné recepty</h4>
-		<div id="recipe-list">
-			{% for recipe in related_recipes %} {% include "recipe-card.html" %} {% endfor %}
-		</div>
-	</div>
-</div>
-
-<div id="overlay" class="overlay">
-	<span class="nav-arrow nav-left" onclick="prevImage()">&#9664;</span>
-	<img id="overlayImage" src="" alt="Overlay Image" />
-	<span class="nav-arrow nav-right" onclick="nextImage()">&#9654;</span>
-</div>
-
-<script>
-    let images = {{ recipe.images | format_images | tojson}};;
-</script>
-<script src="{{ url_for('static', filename='js/recipe-detail.js') }}" defer></script>
-
-{% endblock %}
+	
+	<script>
+		let images = {{ recipe.images | format_images | tojson}};;
+	</script>
+	<script src="{{ url_for('static', filename='js/recipe-detail.js') }}" defer></script>
+	
+	{% endblock %}
+	

@@ -190,18 +190,14 @@ def index():
     # Featured selection by client time
     time_param = request.args.get("time")
     if time_param == "NaN" or time_param is None:
-        print("Nepodařilo se získat čas od klienta, používám čas serveru.")
         client_time = datetime.datetime.now().hour
     else:
         try:
             client_time = int(time_param)
-            print(client_time)
         except ValueError:
-            print("Neplatná hodnota času, používám serverový čas.")
             client_time = datetime.datetime.now().hour
-
     searching_tag = ""
-    if 0 < client_time < 9:
+    if 0 <= client_time < 9:
         searching_tag = "snidane"
     elif client_time < 11:
         searching_tag = "svaciny"
@@ -210,7 +206,7 @@ def index():
     elif client_time < 15:
         searching_tag = "dezerty"
     elif client_time < 17:
-        searching_tag = "svacina"
+        searching_tag = "svaciny"
     else:
         searching_tag = "vecere"
 

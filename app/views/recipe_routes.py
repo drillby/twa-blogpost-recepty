@@ -141,6 +141,15 @@ def add_recipe():
                     )
                     db.session.add(recipe_image)
                 except Exception as e:
+                    for image in new_recipe.images:
+                        vercel_blob.delete(image.image_url)
+
+                    recipe_images = RecipeImage.query.filter_by(recipe_id=new_recipe.id)
+                    for recipe_image in recipe_images:
+                        db.session.delete(recipe_image)
+
+                    db.session.delete(new_recipe)
+                    db.session.commit()
                     flash(f"Chyba při nahrávání obrázku: {str(e)}", "danger")
                     return redirect(url_for("add_recipe"))
             else:
