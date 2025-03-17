@@ -1,6 +1,6 @@
 # FoodFinder
 
-FoodFinder je webová aplikace pro sdílení a vyhledávání receptů, postavená na frameworku Flask a hostovaná na platformě Vercel. Aplikace umožňuje uživatelům přidávat, spravovat a vyhledávat recepty, spravovat svůj uživatelský profil a interagovat s ostatními uživateli prostřednictvím oblíbených receptů.
+FoodFinder je webová aplikace pro sdílení a vyhledávání receptů, postavená na frameworku Flask a hostovaná na platformě Vercel. Aplikace umožňuje uživatelům přidávat a vyhledávat recepty, spravovat svůj uživatelský profil a interagovat s ostatními uživateli prostřednictvím oblíbených receptů.
 
 ## Funkcionalita
 
