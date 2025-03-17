@@ -1,4 +1,5 @@
 from io import BytesIO
+from PIL import Image
 
 import vercel_blob
 from flask import flash, jsonify, redirect, render_template, request, url_for
@@ -123,22 +124,23 @@ def add_recipe():
                 try:
                     img_data = BytesIO()
                     picture.save(img_data)
-                    img_data.seek(
-                        0
-                    )  # reset pozice streamu pro načtení všech bajtů obrázku
-                    img_bytes = img_data.read()
+                    img_data.seek(0)  # reset pozice streamu pro načtení všech bajtů obrázku
+
+                    # Compress image
+                    image = Image.open(img_data)
+                    compressed_img_data = BytesIO()
+                    image.save(compressed_img_data, format="JPEG", quality=70)
+                    compressed_img_data.seek(0)
+                    img_bytes = compressed_img_data.read()
+
                     file_extension = picture.filename.split(".")[-1]
-                    image_path = (
-                        f"recipe-images/{new_recipe.id}-{index + 1}.{file_extension}"
-                    )
+                    image_path = f"recipe-images/{new_recipe.id}-{index + 1}.{file_extension}"
 
                     # Nahrání obrázku na Vercel Blob Storage
                     image_res = vercel_blob.put(image_path, img_bytes)
                     image_url = image_res["url"]
 
-                    recipe_image = RecipeImage(
-                        recipe_id=new_recipe.id, image_url=image_url
-                    )
+                    recipe_image = RecipeImage(recipe_id=new_recipe.id, image_url=image_url)
                     db.session.add(recipe_image)
                 except Exception as e:
                     for image in new_recipe.images:
